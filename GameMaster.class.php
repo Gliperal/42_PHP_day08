@@ -12,8 +12,8 @@ class GameMaster
 	{
 		$this->ships =
 		[
-			new ImperialIronclad("Ship A", 0),
-			new ImperialIronclad("Ship B", 1)
+			new ImperialIronclad("Ship A", 0, 180),
+			new ImperialIronclad("Ship B", 1, 90)
 		];
 		$this->currentPlayer = 1;
 		$this->finishTurn();
@@ -58,6 +58,17 @@ class GameMaster
 		return FALSE;
 	}
 
+	/*
+	public function displayActiveShip()
+	{
+		$ship = $this->getActiveShip();
+		if ($ship === FALSE)
+			echo "FALSE" . PHP_EOL;
+		else
+			print_r($ship);
+	}
+	*/
+
 	public function order($orders)
 	{
 		$ship = $this->getActiveShip();
@@ -66,12 +77,12 @@ class GameMaster
 		return $ship->order($orders);
 	}
 
-	public function move()
+	public function move($orders)
 	{
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 			return ["error" => "You must activate a ship before moving it."];
-		return $ship->move();
+		return $ship->move($orders);
 	}
 
 	public function attack()
