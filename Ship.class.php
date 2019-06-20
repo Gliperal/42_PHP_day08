@@ -1,6 +1,8 @@
 <?php
 
-abstract class Ship
+include_once("dice.php");
+
+class Ship
 {
 	// To be implemented by child class:
 	protected $_size;
@@ -21,7 +23,6 @@ abstract class Ship
 	private $_mp; // Movement points
 	private $_untilTurn;
 	private $_shield;
-	private $_speed_boost;
 	private $_status;
 		private const DEACTIVE = 0, READY = 1, ACTIVE = 2;
 	private $_phase;
@@ -68,12 +69,36 @@ abstract class Ship
 		$this->_status = Ship::ACTIVE;
 		$this->_shield = $this->_base_shield;
 		$this->_cp = 0;
+		$this->_mp = $this->_speed;
 		$this->_pp = $this->_ep;
 		$this->_phase = Ship::ORDER;
 	}
 
 	private function repair($amount)
 	{
+		while ($amount > 0)
+		{
+			$roll = rollD6();
+			echo "Rolling for repair... " . $roll . "." . PHP_EOL;
+			if ($roll == 6)
+			{
+				$this->_hp = $this->_max_hp;
+				echo "Success! Ship hull points restored to " . $this->_hp . "." . PHP_EOL;
+				return ;
+			}
+			$amount--;
+		}
+	}
+
+	private function speedUp($amount)
+	{
+		if ($amount > 0)
+		{
+			echo "Rolling to boost speed..." . PHP_EOL;
+			$boost = rollManyD6($amount);
+			$this->_mp += $boost;
+			echo "Gained " . $boost . " more speed. Total speed for this turn is now " . $this->_mp . "." . PHP_EOL;
+		}
 	}
 
 	public function order($orders)
@@ -94,13 +119,13 @@ abstract class Ship
 		if ($orders["repairs"] > 0)
 		{
 			if ($this->_stationary)
-				$this->repair($order["repairs"]);
+				$this->repair($orders["repairs"]);
 			else
 				return ["error" => "A ship must be stationary in order to enact repairs!"];
 		}
-		$this->_speed_boost = $orders["speed"]; // TODO Roll D6
-		$this->_shield = $orders["shields"];
-		$this->_cp = $orders["weapons"];
+		$this->speedUp($orders["speed"]);
+		$this->_shield += $orders["shields"];
+		$this->_cp += $orders["weapons"];
 		$this->_pp -= $total;
 		return TRUE;
 	}
@@ -111,7 +136,6 @@ abstract class Ship
 			$this->_untilTurn = 0;
 		else
 			$this->_untilTurn = $this->_handling;
-		$this->_mp = $this->_speed;
 	}
 
 	private function move_forward($dist)
@@ -143,6 +167,17 @@ abstract class Ship
 		$this->_untilTurn -= $dist;
 	}
 
+	private function rotate($toAngle)
+	{
+		if ($this->_untilTurn > 0)
+			return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
+		$this->_angle = $toAngle;
+		// TODO Rotation into obstacles
+		// TODO Rotation into out of bounds
+		// TODO Rotation into other ships (maybe considered bucaneering and the rotate is undone)
+		$this->_untilTurn = $this->_handling;
+	}
+
 	public function move($orders)
 	{
 		if ($this->_status != Ship::ACTIVE)
@@ -159,23 +194,14 @@ abstract class Ship
 			if ($orders["dist"] > $this->_mp)
 				return ["error" => "I'm giving her all she's got Captain!"];
 			$this->move_forward($orders["dist"]);
-			break;
+			return TRUE;
 		case "turn-left":
-			if ($this->_untilTurn > 0)
-				return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
-			$this->_angle = ($this->_angle + 90) % 360;
-			$this->_untilTurn = $this->_handling;
-			break;
+			return $this->rotate(($this->_angle + 90) % 360);
 		case "turn-right":
-			if ($this->_untilTurn > 0)
-				return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
-			$this->_angle = ($this->_angle + 270) % 360;
-			$this->_untilTurn = $this->_handling;
-			break;
+			return $this->rotate(($this->_angle + 270) % 360);
 		default:
 			return ["error" => "'" . $orders["type"] . "' is not a valid movement type."];
 		}
-		return TRUE;
 	}
 
 	public function shoot()
