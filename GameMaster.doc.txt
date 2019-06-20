@@ -1,0 +1,39 @@
+<- GameMaster ------------------------------------------------------------------
+The GameMaster class stores a session of an Awesome Battleships Battles game.
+
+An instance is constructed with:
+	new GameMaster();
+
+The class provides the following methods. All of the following methods return
+TRUE on success and an array storing the error message under a key "error" on
+failure.
+
+mixed	activateShip( $name );
+On a player's turn, activate one of their ships by name. That ship can then be
+given orders.
+
+mixed	order( $orders );
+Tell the currently active ship how to distribute its PP. $orders is an array
+containing one or more of the keys "speed", "shields", "weapons", and "repairs",
+the value of which is the amount of PP to be assigned to that function.
+
+mixed	move( $orders );
+Tell the currently active ship how to move. The array $orders stores a key
+"type" which may contain values "move", "turn-left", or "turn-right". Only one
+move type may be specified at a time, but multiple move commands may be sent
+during the movement phase. If the movement type is "move", then the array must
+also contain a key "dist" specifying how many game tiles to move.
+
+mixed	attack();
+Tell the currently active ship to attack.
+
+mixed	finishPhase();
+Tell the currently active ship to discard any remaining PP, CP, etc. and advance
+to the next phase. The phases follow a fixed order: order phase, movement phase,
+attacking phase. Calling finishPhase() on the attacking phase will de-activate
+the ship.
+
+mixed	finishTurn();
+Inform the game that the current player has finished all phases for all of their
+ships, and that now the other player's turn should begin.
+------------------------------------------------------------------ GameMaster ->

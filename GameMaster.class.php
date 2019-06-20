@@ -19,6 +19,15 @@ class GameMaster
 		$this->finishTurn();
 	}
 
+	public function __destruct()
+	{
+	}
+
+	public function doc()
+	{
+		return file_get_contents("GameMaster.doc.txt");
+	}
+
 	public function activateShip($name)
 	{
 		foreach ($this->ships as $ship)
