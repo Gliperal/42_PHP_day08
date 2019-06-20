@@ -1,6 +1,7 @@
 <?php
 
 include_once("Ship.class.php");
+include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
 
 class GameMaster
 {
@@ -11,8 +12,8 @@ class GameMaster
 	{
 		$this->ships =
 		[
-			new Ship("Ship A", 0),
-			new Ship("Ship B", 1)
+			new ImperialIronclad("Ship A", 0),
+			new ImperialIronclad("Ship B", 1)
 		];
 		$this->currentPlayer = 1;
 		$this->finishTurn();

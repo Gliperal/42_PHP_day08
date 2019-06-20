@@ -1,6 +1,6 @@
 <?php
 
-/*abstract*/ class Ship
+abstract class Ship
 {
 	private $_player;
 	private $_name;
@@ -12,6 +12,7 @@
 	private $_speed;
 	private $_handling;
 	private $_shield;
+	private $_base_shield;
 	private $_weapons;
 	private $_speed_boost;
 	private const DEACTIVE = 0, READY = 1, ACTIVE = 2;
@@ -55,7 +56,7 @@
 	public function activate()
 	{
 		$this->_status = Ship::ACTIVE;
-		$this->_shield = 0;
+		$this->_shield = $this->_base_shield;
 		$this->_cp = 0;
 		$this->_pp = $this->_ep;
 		$this->_phase = Ship::ORDER;
