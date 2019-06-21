@@ -22,6 +22,12 @@ abstract class Ship
 
 	protected abstract function getSize();
 	protected abstract function getMaxHP();
+	protected abstract function getEP();
+	protected abstract function getSpeed();
+	protected abstract function getHandling();
+	protected abstract function getBaseShield();
+	protected abstract function getWeapons();
+	protected abstract function getName();
 
 	public function __construct($name, $player, $angle)
 	{
@@ -198,12 +204,15 @@ abstract class Ship
 		}
 	}
 
-	public function shoot()
+	public function shoot($ships, $obstacles)
 	{
 		if ($this->_status != Ship::ACTIVE)
 			return ["error" => "Your ship must be active to shoot!"];
 		if ($this->_phase != Ship::SHOOT)
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
+		// TODO Allow user to choose weapon and assign CP
+		foreach ($weapons as $weapon)
+			$weapon->shoot($ships, $obstacles);
 		return TRUE;
 	}
 
