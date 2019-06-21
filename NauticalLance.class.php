@@ -3,15 +3,20 @@
 include_once("Weapon.class.php");
 include_once("Collidable.class.php");
 include_once("Bullet.class.php");
+include_once("MoveOnAngle.trait.php");
 include_once("dice.php");
 
 class NauticalLance extends Collidable implements Weapon
 {
+	use MoveOnAngle;
+
 	private $_location;
 	private $_offset;
 	private $_angle;
 	private $_angleOffset;
 	private $_cp;
+	// TODO These should probably be constants or something
+	private $_charges = 0;
 	private $_range = [31, 61, 91];
 	private const RANGENAMES = ["short", "middle", "long"];
 	private $_rangeRolls = [4, 5, 6];
@@ -32,35 +37,21 @@ class NauticalLance extends Collidable implements Weapon
 		return ["x" => 1, "y" => 1];
 	}
 
-	// TODO Put this in a trait
-	private function moveOnAngle(&$location, $offset, $angle)
-	{
-		switch($angle)
-		{
-		case 0:
-			$location["x"] = $location["x"] + $offset["x"];
-			$location["y"] = $location["y"] + $offset["y"];
-			break;
-		case 90:
-			$location["x"] += $offset["y"];
-			$location["y"] -= $offset["x"];
-			break;
-		case 180:
-			$location["x"] -= $offset["x"];
-			$location["y"] -= $offset["y"];
-			break;
-		case 270:
-			$location["x"] -= $offset["y"];
-			$location["y"] += $offset["x"];
-			break;
-		}
-	}
-
 	public function move($location, $angle)
 	{
 		$this->_angle = ($angle + $this->_angleOffset) % 360;
 		$this->_location = $location;
 		NauticalLance::moveOnAngle($this->_location, $this->_offset, $angle);
+	}
+
+	public function resetCP()
+	{
+		$this->_cp = $this->_charges;
+	}
+
+	public function receiveCP($amount)
+	{
+		$this->_cp += $amount;
 	}
 
 	private function rollToHit($distance)
@@ -114,7 +105,6 @@ class NauticalLance extends Collidable implements Weapon
 				if ($bullet->overlaps($ship))
 				{
 					// TODO Enfilade shot
-					$this->_cp = 2; // TODO This should be updated elsewhere.
 					while ($this->_cp > 0)
 					{
 						$this->_cp--;

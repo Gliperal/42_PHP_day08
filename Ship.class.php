@@ -96,6 +96,8 @@ abstract class Ship extends Collidable
 		$this->_status = Ship::ACTIVE;
 		$this->_shield = $this->getBaseShield();
 		$this->_cp = 0;
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->resetCP();
 		$this->_mp = $this->getSpeed();
 		$this->_pp = $this->getEP();
 		$this->_phase = Ship::ORDER;
@@ -245,7 +247,10 @@ abstract class Ship extends Collidable
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
 		// TODO Allow user to choose weapon and assign CP
 		foreach ($this->getWeapons() as $weapon)
+		{
+			$weapon->receiveCP($this->_cp);
 			$weapon->shoot($ships, $obstacles);
+		}
 		return TRUE;
 	}
 
