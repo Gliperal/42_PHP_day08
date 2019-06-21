@@ -270,12 +270,27 @@ abstract class Ship extends Collidable
 		return TRUE;
 	}
 
+	public function isDead()
+	{
+		return $this->_hp <= 0;
+	}
+
 	public function takeDamage()
 	{
+		if ($this->isDead())
+			return ;
 		if ($this->_shield > 0)
+		{
+			echo $this->_name . " took 1 point of damage to the shield." . PHP_EOL;
 			$this->_shield--;
+		}
 		else
+		{
+			echo $this->_name . " took 1 point of damage to the hull!" . PHP_EOL;
 			$this->_hp--;
+		}
+		if ($this->_hp <= 0)
+			echo $this->_name . " was destroyed!" . PHP_EOL;
 	}
 }
 

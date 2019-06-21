@@ -99,9 +99,28 @@ class GameMaster
 	private function finishTurn()
 	{
 		$this->_currentPlayer = 1 - $this->_currentPlayer;
-		foreach ($this->_ships as $ship)
+		$allShipsDestroyed = TRUE;
+		$i = 0;
+		while ($i < count($this->_ships))
+		{
+			$ship = $this->_ships[$i];
+			if ($ship->isDead())
+			{
+				// TODO Dead ships become obstacles
+				echo "Removing ship from playfield..." . PHP_EOL;
+				array_splice($this->_ships, $i, 1);
+				continue;
+			}
 			if ($ship->belongsTo($this->_currentPlayer))
+			{
+				$allShipsDestroyed = FALSE;
 				$ship->ready();
+			}
+			$i++;
+		}
+		if ($allShipsDestroyed)
+			// TODO
+			echo "You win!" . PHP_EOL;
 	}
 
 	public function finishPhase()
