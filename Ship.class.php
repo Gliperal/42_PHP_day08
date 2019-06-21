@@ -4,13 +4,6 @@ include_once("dice.php");
 
 abstract class Ship
 {
-	// To be implemented by child class:
-	protected $_ep;
-	protected $_speed;
-	protected $_handling;
-	protected $_base_shield;
-	protected $_weapons;
-
 	private $_player;
 	private $_name;
 	private $_position = ["x" => 0, "y" => 0];
@@ -68,10 +61,10 @@ abstract class Ship
 	public function activate()
 	{
 		$this->_status = Ship::ACTIVE;
-		$this->_shield = $this->_base_shield;
+		$this->_shield = $this->getBaseShield();
 		$this->_cp = 0;
-		$this->_mp = $this->_speed;
-		$this->_pp = $this->_ep;
+		$this->_mp = $this->getSpeed();
+		$this->_pp = $this->getEP();
 		$this->_phase = Ship::ORDER;
 	}
 
@@ -136,7 +129,7 @@ abstract class Ship
 		if ($this->_stationary)
 			$this->_untilTurn = 0;
 		else
-			$this->_untilTurn = $this->_handling;
+			$this->_untilTurn = $this->getHandling();
 	}
 
 	private function move_forward($dist)
@@ -176,7 +169,7 @@ abstract class Ship
 		// TODO Rotation into obstacles
 		// TODO Rotation into out of bounds
 		// TODO Rotation into other ships (maybe considered bucaneering and the rotate is undone)
-		$this->_untilTurn = $this->_handling;
+		$this->_untilTurn = $this->getHandling();
 	}
 
 	public function move($orders)
