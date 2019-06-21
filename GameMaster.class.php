@@ -7,7 +7,7 @@ include_once("Obstacle.class.php");
 class GameMaster
 {
 	private $_currentPlayer;
-	private $_ships;
+	public $_ships;
 	private $_obstacles;
 
 	public function __construct()
@@ -15,7 +15,7 @@ class GameMaster
 		$this->_ships =
 		[
 			new ImperialIronclad("Ship A", 0, ["x" => 10, "y" => 10], 0),
-			new ImperialIronclad("Ship B", 1, ["x" => 30, "y" => 50], 90)
+			new ImperialIronclad("Ship B", 1, ["x" => 30, "y" => 30], 90)
 		];
 		$this->_obstacles =
 		[
@@ -53,19 +53,7 @@ class GameMaster
 		return ["error" => "You have no ship by that name!"];
 	}
 
-	public function finishTurn()
-	{
-		foreach ($this->_ships as $ship)
-			if ($ship->isReady() or $ship->isActive())
-				return ["error" => "You must use all your ships before finishing a turn."];
-		$this->_currentPlayer = 1 - $this->_currentPlayer;
-		foreach ($this->_ships as $ship)
-			if ($ship->belongsTo($this->_currentPlayer))
-				$ship->ready();
-		return TRUE;
-	}
-
-	private function getActiveShip()
+	public function getActiveShip()
 	{
 		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
@@ -108,12 +96,60 @@ class GameMaster
 		return $ship->shoot($this->_ships, $this->_obstacles);
 	}
 
+	private function finishTurn()
+	{
+		$this->_currentPlayer = 1 - $this->_currentPlayer;
+		$allShipsDestroyed = TRUE;
+		$i = 0;
+		while ($i < count($this->_ships))
+		{
+			$ship = $this->_ships[$i];
+			if ($ship->isDead())
+			{
+				// TODO Dead ships become obstacles
+				echo "Removing ship from playfield..." . PHP_EOL;
+				array_splice($this->_ships, $i, 1);
+				continue;
+			}
+			if ($ship->belongsTo($this->_currentPlayer))
+			{
+				$allShipsDestroyed = FALSE;
+				$ship->ready();
+			}
+			$i++;
+		}
+		if ($allShipsDestroyed)
+			// TODO
+			echo "You win!" . PHP_EOL;
+	}
+
 	public function finishPhase()
 	{
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 			return ["error" => "You must activate a ship before using it."];
-		return $ship->finishPhase();
+		$status = $ship->finishPhase();
+		if ($status == TRUE)
+		{
+			foreach ($this->_ships as $ship)
+				if ($ship->isReady() or $ship->isActive())
+					return TRUE;
+			$this->finishTurn();
+		}
+		else
+			return $status;
+	}
+
+	public function __toString()
+	{
+		$str = "GameMaster[" . PHP_EOL;
+		$str .= "Player " . $this->_currentPlayer . " to move." . PHP_EOL;
+		foreach ($this->_ships as $ship)
+			$str .= $ship . PHP_EOL;
+		foreach ($this->_obstacles as $obstacle)
+			$str .= $obstacle . PHP_EOL;
+		$str .= "]";
+		return $str;
 	}
 }
 

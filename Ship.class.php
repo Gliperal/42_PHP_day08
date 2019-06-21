@@ -21,7 +21,7 @@ abstract class Ship extends Collidable
 		private const ORDER = 0, MOVE = 1, SHOOT = 2;
 	private $_stationary;
 
-	protected abstract function getSize();
+//	protected abstract function getSize();
 	protected abstract function getMaxHP();
 	protected abstract function getEP();
 	protected abstract function getSpeed();
@@ -37,7 +37,23 @@ abstract class Ship extends Collidable
 		$this->_angle = $angle;
 		$this->_status = Ship::DEACTIVE;
 		$this->_hp = $this->getMaxHP();
+		$this->_shield = $this->getBaseShield();
 		$this->_stationary = true;
+	}
+
+	public function __toString()
+	{
+		return sprintf("Ship[\"%s\" (%d,%d) facing %d | HP %d(%d) | PP %d | CP %d | MP %d ]",
+			$this->_name,
+			$this->_position["x"],
+			$this->_position["y"],
+			$this->_angle,
+			$this->_hp,
+			$this->_shield,
+			$this->_pp,
+			$this->_cp,
+			$this->_mp
+		);
 	}
 
 	public function belongsTo($player)
@@ -65,9 +81,19 @@ abstract class Ship extends Collidable
 		return $this->_status == Ship::ACTIVE;
 	}
 
+	public function isInactive()
+	{
+		return $this->_status == Ship::DEACTIVE;
+	}
+
 	public function ready()
 	{
 		$this->_status = Ship::READY;
+	}
+
+	public function getPP()
+	{
+		return $this->_pp;
 	}
 
 	public function activate()
@@ -75,6 +101,8 @@ abstract class Ship extends Collidable
 		$this->_status = Ship::ACTIVE;
 		$this->_shield = $this->getBaseShield();
 		$this->_cp = 0;
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->resetCP();
 		$this->_mp = $this->getSpeed();
 		$this->_pp = $this->getEP();
 		$this->_phase = Ship::ORDER;
@@ -224,7 +252,10 @@ abstract class Ship extends Collidable
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
 		// TODO Allow user to choose weapon and assign CP
 		foreach ($this->getWeapons() as $weapon)
+		{
+			$weapon->receiveCP($this->_cp);
 			$weapon->shoot($ships, $obstacles);
+		}
 		return TRUE;
 	}
 
@@ -242,6 +273,29 @@ abstract class Ship extends Collidable
 			$this->move_init();
 		}
 		return TRUE;
+	}
+
+	public function isDead()
+	{
+		return $this->_hp <= 0;
+	}
+
+	public function takeDamage()
+	{
+		if ($this->isDead())
+			return ;
+		if ($this->_shield > 0)
+		{
+			echo $this->_name . " took 1 point of damage to the shield." . PHP_EOL;
+			$this->_shield--;
+		}
+		else
+		{
+			echo $this->_name . " took 1 point of damage to the hull!" . PHP_EOL;
+			$this->_hp--;
+		}
+		if ($this->_hp <= 0)
+			echo $this->_name . " was destroyed!" . PHP_EOL;
 	}
 }
 
