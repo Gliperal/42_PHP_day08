@@ -123,9 +123,20 @@ if ($currentShip != False)
 				<form class="move" action="moveOrderRight.php", method="get">
 					<button><img class="pl" src="resources/images/turn_right.png" /></button>
 				</form>
+				<form class="move" action="moveOrderForward.php", method="get">
+					<input type="submit" value="Forward" />
+				</form>
 			</div>
-			<div class="normal"></div>
-			<div class="small"></div>
+			<div class="normal">
+				<form class="move" action="attack.php", method="get">
+					<input type="submit" value="Attack" />
+				</form>
+			</div>
+			<div class="small">
+				<form class="fin" action="endPhase.php", method="get">
+					<input type="submit" value="End Phase" />
+				</form>
+			</div>
 			<div class="end"></div>
 		</div>
 	</body>

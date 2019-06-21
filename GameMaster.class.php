@@ -14,8 +14,8 @@ class GameMaster
 	{
 		$this->_ships =
 		[
-			new ImperialIronclad("Ship A", 0, ["x" => 10, "y" => 10], 0),
-			new ImperialIronclad("Ship B", 1, ["x" => 30, "y" => 30], 90)
+			new ImperialIronclad("ShipA", 0, ["x" => 10, "y" => 10], 0),
+			new ImperialIronclad("ShipB", 1, ["x" => 30, "y" => 30], 90)
 		];
 		$this->_obstacles =
 		[
