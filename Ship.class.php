@@ -1,6 +1,7 @@
 <?php
 
 include_once("dice.php");
+include_once("escape.php");
 include_once("Collidable.class.php");
 
 abstract class Ship extends Collidable
@@ -21,7 +22,6 @@ abstract class Ship extends Collidable
 		private const ORDER = 0, MOVE = 1, SHOOT = 2;
 	private $_stationary;
 
-//	protected abstract function getSize();
 	protected abstract function getMaxHP();
 	protected abstract function getEP();
 	protected abstract function getSpeed();
@@ -54,6 +54,36 @@ abstract class Ship extends Collidable
 			$this->_cp,
 			$this->_mp
 		);
+	}
+
+	public function toTitleTag()
+	{
+		return sprintf("&#147%s&#148 | HP %d(%d) | PP %d | CP %d | MP %d",
+			$this->_name,
+			$this->_hp,
+			$this->_shield,
+			$this->_pp,
+			$this->_cp,
+			$this->_mp
+		);
+	}
+
+	public function toHTML()
+	{
+		$size = $this->getSize();
+		$loc = $this->_position;
+		echo "<img";
+		echo " src=\"https://via.placeholder.com/350x150\"";
+		echo " width=\"" . 100 * $size["x"] / 150 . "%\"";
+		echo " height=\"" . 100 * $size["y"] / 100 . "%\"";
+		echo " title=\"" . $this->toTitleTag() . "\"";
+		echo " class=\"rotate" . $this->_angle . "\"";
+		echo " style=\"";
+			echo "position: absolute;";
+			echo "left: " . 100 * $loc["x"] / 150 . "%;";
+			echo "top: " . 100 * $loc["y"] / 100 . "%;";
+		echo "\"";
+		echo " />";
 	}
 
 	public function belongsTo($player)

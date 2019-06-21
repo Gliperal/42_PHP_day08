@@ -73,7 +73,7 @@ if (!array_key_exists('master', $_SESSION))
 	</head>
 	<body>
 		<div class="Iframe">
-			<iframe src="map.html"></iframe>
+			<iframe src="map.php"></iframe>
 		</div>
 		<div class="Align-Bottom">
 			<div class="normal">
