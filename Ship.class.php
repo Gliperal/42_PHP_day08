@@ -1,12 +1,13 @@
 <?php
 
 include_once("dice.php");
+include_once("Collidable.class.php");
 
-abstract class Ship
+abstract class Ship extends Collidable
 {
 	private $_player;
 	private $_name;
-	private $_position = ["x" => 0, "y" => 0];
+	private $_position;
 	private $_angle;
 	private $_hp;
 	private $_pp;
@@ -27,12 +28,12 @@ abstract class Ship
 	protected abstract function getHandling();
 	protected abstract function getBaseShield();
 	protected abstract function getWeapons();
-	protected abstract function getName();
 
-	public function __construct($name, $player, $angle)
+	public function __construct($name, $player, $position, $angle)
 	{
 		$this->_name = $name;
 		$this->_player = $player;
+		$this->_position = $position;
 		$this->_angle = $angle;
 		$this->_status = Ship::DEACTIVE;
 		$this->_hp = $this->getMaxHP();
@@ -42,6 +43,11 @@ abstract class Ship
 	public function belongsTo($player)
 	{
 		return $this->_player == $player;
+	}
+
+	protected function getLocation()
+	{
+		return $this->_position;
 	}
 
 	public function getName()
@@ -165,6 +171,9 @@ abstract class Ship
 		// TODO Watch out for collisions
 		$this->_mp -= $dist;
 		$this->_untilTurn -= $dist;
+		// TODO This should go at the end of a move_finalize function
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->move($this->_position, $this->_angle);
 	}
 
 	private function rotate($toAngle)
@@ -176,6 +185,9 @@ abstract class Ship
 		// TODO Rotation into out of bounds
 		// TODO Rotation into other ships (maybe considered bucaneering and the rotate is undone)
 		$this->_untilTurn = $this->getHandling();
+		// TODO This should go at the end of a move_finalize function
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->move($this->_position, $this->_angle);
 	}
 
 	public function move($orders)
@@ -211,8 +223,8 @@ abstract class Ship
 		if ($this->_phase != Ship::SHOOT)
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
 		// TODO Allow user to choose weapon and assign CP
-//		foreach ($weapons as $weapon)
-//			$weapon->shoot($ships, $obstacles);
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->shoot($ships, $obstacles);
 		return TRUE;
 	}
 
