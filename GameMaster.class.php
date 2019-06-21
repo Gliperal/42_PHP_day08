@@ -2,20 +2,26 @@
 
 include_once("Ship.class.php");
 include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
+include_once("Obstacle.class.php");
 
 class GameMaster
 {
-	private $currentPlayer;
-	private $ships;
+	private $_currentPlayer;
+	private $_ships;
+	private $_obstacles;
 
 	public function __construct()
 	{
-		$this->ships =
+		$this->_ships =
 		[
-			new ImperialIronclad("Ship A", 0, 180),
-			new ImperialIronclad("Ship B", 1, 90)
+			new ImperialIronclad("Ship A", 0, ["x" => 10, "y" => 10], 0),
+			new ImperialIronclad("Ship B", 1, ["x" => 30, "y" => 50], 90)
 		];
-		$this->currentPlayer = 1;
+		$this->_obstacles =
+		[
+			new Obstacle(70, 45, 10, 10)
+		];
+		$this->_currentPlayer = 1;
 		$this->finishTurn();
 	}
 
@@ -30,10 +36,10 @@ class GameMaster
 
 	public function activateShip($name)
 	{
-		foreach ($this->ships as $ship)
+		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
 				return ["error" => "You have an active ship. Finish its turn before selecting a new one."];
-		foreach ($this->ships as $ship)
+		foreach ($this->_ships as $ship)
 			if ($ship->getName() == $name)
 			{
 				if ($ship->isReady())
@@ -49,19 +55,19 @@ class GameMaster
 
 	public function finishTurn()
 	{
-		foreach ($this->ships as $ship)
+		foreach ($this->_ships as $ship)
 			if ($ship->isReady() or $ship->isActive())
 				return ["error" => "You must use all your ships before finishing a turn."];
-		$this->currentPlayer = 1 - $this->currentPlayer;
-		foreach ($this->ships as $ship)
-			if ($ship->belongsTo($this->currentPlayer))
+		$this->_currentPlayer = 1 - $this->_currentPlayer;
+		foreach ($this->_ships as $ship)
+			if ($ship->belongsTo($this->_currentPlayer))
 				$ship->ready();
 		return TRUE;
 	}
 
 	private function getActiveShip()
 	{
-		foreach ($this->ships as $ship)
+		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
 				return $ship;
 		return FALSE;
@@ -99,7 +105,7 @@ class GameMaster
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 			return ["error" => "You must activate a ship before attacking with it."];
-		return $ship->shoot();
+		return $ship->shoot($this->_ships, $this->_obstacles);
 	}
 
 	public function finishPhase()
