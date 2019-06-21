@@ -3,6 +3,7 @@
 include_once("Ship.class.php");
 include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
 include_once("Obstacle.class.php");
+include_once("Console.class.php");
 
 class GameMaster
 {
@@ -12,6 +13,7 @@ class GameMaster
 
 	public function __construct()
 	{
+		Console::clear();
 		$this->_ships =
 		[
 			new ImperialIronclad("Bob", 0, ["x" => 10, "y" => 10], 0),
@@ -38,7 +40,10 @@ class GameMaster
 	{
 		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
+			{
+				Console::log_error("You have an active ship. Finish its turn before selecting a new one.");
 				return ["error" => "You have an active ship. Finish its turn before selecting a new one."];
+			}
 		foreach ($this->_ships as $ship)
 			if ($ship->getName() == $name)
 			{
@@ -48,8 +53,12 @@ class GameMaster
 					return TRUE;
 				}
 				else
+				{
+					Console::log_error("That ship does not belong to you.");
 					return ["error" => "That ship does not belong to you."];
+				}
 			}
+		Console::log_error("You have no ship by that name!");
 		return ["error" => "You have no ship by that name!"];
 	}
 
@@ -76,7 +85,10 @@ class GameMaster
 	{
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
+		{
+			Console::log_error("You must activate a ship before commanding it.");
 			return ["error" => "You must activate a ship before commanding it."];
+		}
 		return $ship->order($orders);
 	}
 
@@ -84,7 +96,10 @@ class GameMaster
 	{
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
+		{
+			Console::log_error("You must activate a ship before moving it.");
 			return ["error" => "You must activate a ship before moving it."];
+		}
 		return $ship->move($orders);
 	}
 
@@ -92,7 +107,10 @@ class GameMaster
 	{
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
+		{
+			Console::log_error("You must activate a ship before attacking with it.");
 			return ["error" => "You must activate a ship before attacking with it."];
+		}
 		return $ship->shoot($this->_ships, $this->_obstacles);
 	}
 
@@ -107,7 +125,7 @@ class GameMaster
 			if ($ship->isDead())
 			{
 				// TODO Dead ships become obstacles
-				echo "Removing ship from playfield..." . PHP_EOL;
+				Console::log_debug("Removing ship from playfield...");
 				array_splice($this->_ships, $i, 1);
 				continue;
 			}
@@ -120,14 +138,18 @@ class GameMaster
 		}
 		if ($allShipsDestroyed)
 			// TODO
-			echo "You win!" . PHP_EOL;
+			Console::log_message("You win!");
 	}
 
 	public function finishPhase()
 	{
+		Console::log_debug("finishPhase()");
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
+		{
+			Console::log_error("You must activate a ship before using it.");
 			return ["error" => "You must activate a ship before using it."];
+		}
 		$status = $ship->finishPhase();
 		if ($status == TRUE)
 		{
@@ -137,6 +159,7 @@ class GameMaster
 			$this->finishTurn();
 		}
 		else
+			Console::log_error($status["error"]);
 			return $status;
 	}
 

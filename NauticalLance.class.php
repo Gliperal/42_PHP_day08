@@ -61,24 +61,23 @@ class NauticalLance extends Collidable implements Weapon
 		{
 			if ($r == 3)
 			{
-				echo "Target out of maximum range!" . PHP_EOL;
+				Console::log_message("Target out of maximum range!");
 				return FALSE;
 			}
 			if ($distance < $this->_range[$r])
 				break ;
 			$r++;
 		}
-		echo "Rolling to hit at " . NauticalLance::RANGENAMES[$r] . " range ... ";
 		$roll = rollD6();
-		echo $roll;
+		$msg = "Rolling to hit at " . NauticalLance::RANGENAMES[$r] . " range ... " . $roll;
 		if ($roll >= $this->_rangeRolls[$r])
 		{
-			echo " hits!" . PHP_EOL;
+			Console::log_message($msg . " hits!");
 			return TRUE;
 		}
 		else
 		{
-			echo " misses." . PHP_EOL;
+			Console::log_message($msg . " misses.");
 			return FALSE;
 		}
 	}
@@ -92,13 +91,13 @@ class NauticalLance extends Collidable implements Weapon
 			$bullet->move();
 			if ($bullet->isOOB())
 			{
-				echo "Bullet went off map." . PHP_EOL;
+				Console::log_debug("Bullet went off map.");
 				return;
 			}
 			foreach ($obstacles as $obstacle)
 				if ($bullet->overlaps($obstacle))
 				{
-					echo "Bullet hit obstacle." . PHP_EOL;
+					Console::log_debug("Bullet hit obstacle.");
 					return;
 				}
 			foreach ($ships as $ship)

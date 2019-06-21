@@ -143,11 +143,11 @@ abstract class Ship extends Collidable
 		while ($amount > 0)
 		{
 			$roll = rollD6();
-			echo "Rolling for repair... " . $roll . "." . PHP_EOL;
+			Console::log_message("Rolling for repair... " . $roll . ".");
 			if ($roll == 6)
 			{
 				$this->_hp = $this->getMaxHP();
-				echo "Success! Ship hull points restored to " . $this->_hp . "." . PHP_EOL;
+				Console::log_message("Success! Ship hull points restored to " . $this->_hp . ".");
 				return ;
 			}
 			$amount--;
@@ -158,19 +158,25 @@ abstract class Ship extends Collidable
 	{
 		if ($amount > 0)
 		{
-			echo "Rolling to boost speed..." . PHP_EOL;
+			Console::log_message("Rolling to boost speed...");
 			$boost = rollManyD6($amount);
 			$this->_mp += $boost;
-			echo "Gained " . $boost . " more speed. Total speed for this turn is now " . $this->_mp . "." . PHP_EOL;
+			Console::log_message("Gained " . $boost . " more speed. Total speed for this turn is now " . $this->_mp . ".");
 		}
 	}
 
 	public function order($orders)
 	{
 		if ($this->_status != Ship::ACTIVE)
+		{
+			Console::log_error("Your ship must be active to give it orders!");
 			return ["error" => "Your ship must be active to give it orders!"];
+		}
 		if ($this->_phase != Ship::ORDER)
+		{
+			Console::log_error("Your ship must be in the order phase to give it orders!");
 			return ["error" => "Your ship must be in the order phase to give it orders!"];
+		}
 		$total = 0;
 		foreach (["speed", "shields", "weapons", "repairs"] as $key)
 		{
@@ -179,13 +185,19 @@ abstract class Ship extends Collidable
 			$total += $orders[$key];
 		}
 		if ($total > $this->_pp)
+		{
+			Console::log_error("Your ship does not have that many PP to spend!");
 			return ["error" => "Your ship does not have that many PP to spend!"];
+		}
 		if ($orders["repairs"] > 0)
 		{
 			if ($this->_stationary)
 				$this->repair($orders["repairs"]);
 			else
+			{
+				Console::log_error("A ship must be stationary in order to enact repairs!");
 				return ["error" => "A ship must be stationary in order to enact repairs!"];
+			}
 		}
 		$this->speedUp($orders["speed"]);
 		$this->_shield += $orders["shields"];
@@ -237,7 +249,10 @@ abstract class Ship extends Collidable
 	private function rotate($toAngle)
 	{
 		if ($this->_untilTurn > 0)
+		{
+			Console::log_error("Your ship cannot make turns that sharp! Try moving a little first.");
 			return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
+		}
 		$this->_angle = $toAngle;
 		// TODO Rotation into obstacles
 		// TODO Rotation into out of bounds
@@ -251,18 +266,33 @@ abstract class Ship extends Collidable
 	public function move($orders)
 	{
 		if ($this->_status != Ship::ACTIVE)
+		{
+			Console::log_error("Your ship must be active to move!");
 			return ["error" => "Your ship must be active to move!"];
+		}
 		if ($this->_phase != Ship::MOVE)
+		{
+			Console::log_error("Your ship must be in the movement phase to move!");
 			return ["error" => "Your ship must be in the movement phase to move!"];
+		}
 		if (!array_key_exists("type", $orders))
+		{
+			Console::log_error("Your captain is drunk.");
 			return ["error" => "Your captain is drunk."];
+		}
 		switch($orders["type"])
 		{
 		case "move":
 			if (!array_key_exists("dist", $orders) or !is_numeric($orders["dist"]))
+			{
+				Console::log_error("Must specify a distance to move.");
 				return ["error" => "Must specify a distance to move."];
+			}
 			if ($orders["dist"] > $this->_mp)
+			{
+				Console::log_error("I'm giving her all she's got Captain!");
 				return ["error" => "I'm giving her all she's got Captain!"];
+			}
 			$this->move_forward($orders["dist"]);
 			return TRUE;
 		case "turn-left":
@@ -270,6 +300,7 @@ abstract class Ship extends Collidable
 		case "turn-right":
 			return $this->rotate(($this->_angle + 270) % 360);
 		default:
+			Console::log_error("'" . $orders["type"] . "' is not a valid movement type.");
 			return ["error" => "'" . $orders["type"] . "' is not a valid movement type."];
 		}
 	}
@@ -277,9 +308,15 @@ abstract class Ship extends Collidable
 	public function shoot($ships, $obstacles)
 	{
 		if ($this->_status != Ship::ACTIVE)
+		{
+			Console::log_error("Your ship must be active to shoot!");
 			return ["error" => "Your ship must be active to shoot!"];
+		}
 		if ($this->_phase != Ship::SHOOT)
+		{
+			Console::log_error("Your ship must be in the shooting phase to shoot!");
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
+		}
 		// TODO Allow user to choose weapon and assign CP
 		foreach ($this->getWeapons() as $weapon)
 		{
@@ -292,7 +329,10 @@ abstract class Ship extends Collidable
 	public function finishPhase()
 	{
 		if ($this->_status != Ship::ACTIVE)
+		{
+			Console::log_error("You must have an active ship to do that!");
 			return ["error" => "Your ship must be active to do that!"];
+		}
 		if ($this->_phase == Ship::SHOOT)
 			$this->_status = Ship::DEACTIVE;
 		else if ($this->_phase == Ship::MOVE)
@@ -316,16 +356,16 @@ abstract class Ship extends Collidable
 			return ;
 		if ($this->_shield > 0)
 		{
-			echo $this->_name . " took 1 point of damage to the shield." . PHP_EOL;
+			Console::log_message($this->_name . " took 1 point of damage to the shield.");
 			$this->_shield--;
 		}
 		else
 		{
-			echo $this->_name . " took 1 point of damage to the hull!" . PHP_EOL;
+			Console::log_message($this->_name . " took 1 point of damage to the hull!");
 			$this->_hp--;
 		}
 		if ($this->_hp <= 0)
-			echo $this->_name . " was destroyed!" . PHP_EOL;
+			Console::log_message($this->_name . " was destroyed!");
 	}
 }
 
