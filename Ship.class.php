@@ -211,8 +211,8 @@ abstract class Ship
 		if ($this->_phase != Ship::SHOOT)
 			return ["error" => "Your ship must be in the shooting phase to shoot!"];
 		// TODO Allow user to choose weapon and assign CP
-		foreach ($weapons as $weapon)
-			$weapon->shoot($ships, $obstacles);
+//		foreach ($weapons as $weapon)
+//			$weapon->shoot($ships, $obstacles);
 		return TRUE;
 	}
 
