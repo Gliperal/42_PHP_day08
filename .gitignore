@@ -1,3 +1,5 @@
 ._DS*
 .*.swp
 .*.swo
+resources/.*
+resources/images/.*
