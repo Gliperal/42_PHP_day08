@@ -3,6 +3,7 @@
 include_once("Weapon.class.php");
 include_once("Collidable.class.php");
 include_once("Bullet.class.php");
+include_once("dice.php");
 
 class NauticalLance extends Collidable implements Weapon
 {
@@ -10,6 +11,10 @@ class NauticalLance extends Collidable implements Weapon
 	private $_offset;
 	private $_angle;
 	private $_angleOffset;
+	private $_cp;
+	private $_range = [31, 61, 91];
+	private const RANGENAMES = ["short", "middle", "long"];
+	private $_rangeRolls = [4, 5, 6];
 
 	public function __construct($offset, $angleOffset)
 	{
@@ -58,6 +63,35 @@ class NauticalLance extends Collidable implements Weapon
 		NauticalLance::moveOnAngle($this->_location, $this->_offset, $angle);
 	}
 
+	private function rollToHit($distance)
+	{
+		$r = 0;
+		while (true)
+		{
+			if ($r == 3)
+			{
+				echo "Target out of maximum range!" . PHP_EOL;
+				return FALSE;
+			}
+			if ($distance < $this->_range[$r])
+				break ;
+			$r++;
+		}
+		echo "Rolling to hit at " . NauticalLance::RANGENAMES[$r] . " range ... ";
+		$roll = rollD6();
+		echo $roll;
+		if ($roll >= $this->_rangeRolls[$r])
+		{
+			echo " hits!" . PHP_EOL;
+			return TRUE;
+		}
+		else
+		{
+			echo " misses." . PHP_EOL;
+			return FALSE;
+		}
+	}
+
 	public function shoot($ships, $obstacles)
 	{
 		$bullet_size = ["x" => 1, "y" => 1];
@@ -73,16 +107,20 @@ class NauticalLance extends Collidable implements Weapon
 			foreach ($obstacles as $obstacle)
 				if ($bullet->overlaps($obstacle))
 				{
-					echo "Bullet hit obstacle:" . PHP_EOL;
-					print_r($obstacle);
+					echo "Bullet hit obstacle." . PHP_EOL;
 					return;
 				}
 			foreach ($ships as $ship)
 				if ($bullet->overlaps($ship))
 				{
-					echo "Bullet hit ship:" . PHP_EOL;
-					print_r($ship);
-					// TODO Damage 'n shit
+					// TODO Enfilade shot
+					$this->_cp = 2; // TODO This should be updated elsewhere.
+					while ($this->_cp > 0)
+					{
+						$this->_cp--;
+						if ($this->rollToHit($this->distanceTo($bullet)))
+							$ship->takeDamage();
+					}
 					return;
 				}
 		}

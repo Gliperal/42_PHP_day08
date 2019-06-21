@@ -93,6 +93,15 @@ abstract class Collidable
 				return FALSE;
 		return TRUE;
 	}
+
+	public function distanceTo(Collidable $that)
+	{
+		$lA = $this->getLocation();
+		$lB = $that->getLocation();
+		$diffX = $lA["x"] - $lB["x"];
+		$diffY = $lA["y"] - $lB["y"];
+		return sqrt($diffX * $diffX + $diffY * $diffY);
+	}
 }
 
 ?>

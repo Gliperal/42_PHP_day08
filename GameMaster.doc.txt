@@ -31,9 +31,6 @@ mixed	finishPhase();
 Tell the currently active ship to discard any remaining PP, CP, etc. and advance
 to the next phase. The phases follow a fixed order: order phase, movement phase,
 attacking phase. Calling finishPhase() on the attacking phase will de-activate
-the ship.
-
-mixed	finishTurn();
-Inform the game that the current player has finished all phases for all of their
-ships, and that now the other player's turn should begin.
+the ship. If calling finishPhase() deactivates the last of a player's ships,
+then the game will switch to the opponent's turn.
 ------------------------------------------------------------------ GameMaster ->
