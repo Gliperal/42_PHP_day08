@@ -2,11 +2,9 @@
 
 include_once("dice.php");
 
-class Ship
+abstract class Ship
 {
 	// To be implemented by child class:
-	protected $_size;
-	protected $_max_hp;
 	protected $_ep;
 	protected $_speed;
 	protected $_handling;
@@ -29,13 +27,16 @@ class Ship
 		private const ORDER = 0, MOVE = 1, SHOOT = 2;
 	private $_stationary;
 
+	protected abstract function getSize();
+	protected abstract function getMaxHP();
+
 	public function __construct($name, $player, $angle)
 	{
 		$this->_name = $name;
 		$this->_player = $player;
 		$this->_angle = $angle;
 		$this->_status = Ship::DEACTIVE;
-		$this->_hp = $this->_max_hp;
+		$this->_hp = $this->getMaxHP();
 		$this->_stationary = true;
 	}
 
@@ -82,7 +83,7 @@ class Ship
 			echo "Rolling for repair... " . $roll . "." . PHP_EOL;
 			if ($roll == 6)
 			{
-				$this->_hp = $this->_max_hp;
+				$this->_hp = $this->getMaxHP();
 				echo "Success! Ship hull points restored to " . $this->_hp . "." . PHP_EOL;
 				return ;
 			}
