@@ -7,7 +7,7 @@ include_once("Obstacle.class.php");
 class GameMaster
 {
 	private $_currentPlayer;
-	private $_ships;
+	public $_ships;
 	private $_obstacles;
 
 	public function __construct()
@@ -53,7 +53,7 @@ class GameMaster
 		return ["error" => "You have no ship by that name!"];
 	}
 
-	private function getActiveShip()
+	public function getActiveShip()
 	{
 		foreach ($this->_ships as $ship)
 			if ($ship->isActive())

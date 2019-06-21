@@ -21,7 +21,7 @@ abstract class Ship extends Collidable
 		private const ORDER = 0, MOVE = 1, SHOOT = 2;
 	private $_stationary;
 
-	protected abstract function getSize();
+//	protected abstract function getSize();
 	protected abstract function getMaxHP();
 	protected abstract function getEP();
 	protected abstract function getSpeed();
@@ -89,6 +89,11 @@ abstract class Ship extends Collidable
 	public function ready()
 	{
 		$this->_status = Ship::READY;
+	}
+
+	public function getPP()
+	{
+		return $this->_pp;
 	}
 
 	public function activate()
