@@ -34,15 +34,17 @@ if (!array_key_exists('master', $_SESSION))
 				border-color:		white;
 			}
 			div.end {
-				display: flex;
-				width:	30%;
-				background-color:	black;
+				display:			flex-wrap;
+				overflow:			hidden;
+				width:				30%;
+				background-color:	white;
 				border-style:		solid;
 				border-color:		white;
 			}
 			div.Align-Bottom {
 				display: flex;
 				min-height: 20%;
+				max-height: 25%;
 				width:		10%
 				align-items: left;
 				justify-content: flex-start;
@@ -69,6 +71,10 @@ if (!array_key_exists('master', $_SESSION))
 				height:	20px;
 				width:	20px;
 			}
+			img.fire {
+				width:	100%;
+				height:	30%;
+			}
 		</style>
 	</head>
 	<body>
@@ -85,7 +91,7 @@ foreach($game->_ships as $ship)
 	$name = $ship->getName();
 	if ($ship instanceof ImperialIronclad)
 		$type = 'Imperial Ironclad';
-	echo '<input type="radio" name="name" value='.$name.'>'.$type.' '.$name.'</input>';
+	echo '<input type="radio" name="name" value='.$name.'>'.$type.':<br /> '.$name.'<br /></input><br />';
 }
 ?>
 					<input type="submit"></input>
@@ -129,7 +135,7 @@ if ($currentShip != False)
 			</div>
 			<div class="normal">
 				<form class="move" action="attack.php", method="get">
-					<input type="submit" value="Attack" />
+					<button type="submit" value="Attack"><img class="fire" src="resources/images/fire.png" /></button>
 				</form>
 			</div>
 			<div class="small">
@@ -137,7 +143,13 @@ if ($currentShip != False)
 					<input type="submit" value="End Phase" />
 				</form>
 			</div>
-			<div class="end"></div>
+			<div class="end">
+<?php
+include_once("Console.class.php");
+session_start();
+echo Console::log_to_HTML();
+?>
+			</div>
 		</div>
 	</body>
 </html>

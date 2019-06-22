@@ -48,7 +48,7 @@ class Console
 			$type = (substr($message, 0, 5) == "ERROR") ? "log-err" : "log-msg";
 //			if (substr($message, 0, 5) == "DEBUG")
 //				continue;
-			$str .= "<p class=\"" . $type . "\">" . $message . "</p>" . PHP_EOL;
+			$str = "<p class=\"" . $type . "\">" . $message . "</p>" . $str . PHP_EOL;
 		}
 		return $str;
 	}
