@@ -4,7 +4,8 @@ include_once("NauticalLance.class.php");
 
 class ImperialIronclad extends Ship
 {
-	private $_size = ["x" => 2, "y" => 7];
+	private $_size = ["x" => 7, "y" => 2];
+	private $_center = ["x" => 3, "y" => 0];
 	private $_max_hp = 8;
 	private $_ep = 12;
 	private $_speed = 12;
@@ -16,14 +17,19 @@ class ImperialIronclad extends Ship
 	{
 		parent::__construct($name, $player, $position, $angle);
 		$this->_weapons = [
-			new NauticalLance(["x" => 6, "y" => 0], 0),
-			new NauticalLance(["x" => 6, "y" => 1], 0)
+			new NauticalLance(["x" => 3, "y" => 0], 0),
+			new NauticalLance(["x" => 3, "y" => 1], 0)
 		];
 	}
 
-	protected function getSize()
+	protected function getRawSize()
 	{
 		return $this->_size;
+	}
+
+	protected function getCenter()
+	{
+		return $this->_center;
 	}
 
 	protected function getMaxHP()

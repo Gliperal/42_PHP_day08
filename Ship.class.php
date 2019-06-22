@@ -22,6 +22,8 @@ abstract class Ship extends Collidable
 		private const ORDER = 0, MOVE = 1, SHOOT = 2;
 	private $_stationary;
 
+	protected abstract function getRawSize();
+	protected abstract function getCenter();
 	protected abstract function getMaxHP();
 	protected abstract function getEP();
 	protected abstract function getSpeed();
@@ -43,10 +45,11 @@ abstract class Ship extends Collidable
 
 	public function __toString()
 	{
+		$loc = $this->getLocation();
 		return sprintf("Ship[\"%s\" (%d,%d) facing %d | HP %d(%d) | PP %d | CP %d | MP %d ]",
 			$this->_name,
-			$this->_position["x"],
-			$this->_position["y"],
+			$loc["x"],
+			$loc["y"],
 			$this->_angle,
 			$this->_hp,
 			$this->_shield,
@@ -71,13 +74,13 @@ abstract class Ship extends Collidable
 	public function toHTML()
 	{
 		$size = $this->getSize();
-		$loc = $this->_position;
+		$loc = $this->getLocation();
 		echo "<img";
 		echo " src=\"https://via.placeholder.com/350x150\"";
 		echo " width=\"" . 100 * $size["x"] / 150 . "%\"";
 		echo " height=\"" . 100 * $size["y"] / 100 . "%\"";
 		echo " title=\"" . $this->toTitleTag() . "\"";
-		echo " class=\"rotate" . $this->_angle . "\"";
+//		echo " class=\"rotate" . $this->_angle . "\"";
 		echo " style=\"";
 			echo "position: absolute;";
 			echo "left: " . 100 * $loc["x"] / 150 . "%;";
@@ -91,9 +94,43 @@ abstract class Ship extends Collidable
 		return $this->_player == $player;
 	}
 
+	protected function getSize()
+	{
+		$raw = $this->getRawSize();
+		if ($this->_angle % 180 == 90)
+			return ["x" => $raw["y"], "y" => $raw["x"]];
+		else
+			return $raw;
+	}
+
 	protected function getLocation()
 	{
-		return $this->_position;
+		$loc = $this->_position;
+		$size = $this->getRawSize();
+		$center = $this->getCenter();
+		switch($this->_angle)
+		{
+		case 0:
+			return [
+				"x" => $loc["x"] - $center["x"],
+				"y" => $loc["y"] - $center["y"]
+			];
+		case 90:
+			return [
+				"x" => $loc["x"] - $center["y"],
+				"y" => $loc["y"] + $center["x"] + 1 - $size["x"]
+			];
+		case 180:
+			return [
+				"x" => $loc["x"] + $center["x"] + 1 - $size["x"],
+				"y" => $loc["y"] + $center["y"] + 1 - $size["y"]
+			];
+		case 270:
+			return [
+				"x" => $loc["x"] + $center["y"] + 1 - $size["y"],
+				"y" => $loc["y"] - $center["x"]
+			];
+		}
 	}
 
 	public function getName()
@@ -136,6 +173,10 @@ abstract class Ship extends Collidable
 		$this->_mp = $this->getSpeed();
 		$this->_pp = $this->getEP();
 		$this->_phase = Ship::ORDER;
+		// TODO This should go at the end of a move_finalize function
+		$this->debug_print_location();
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->move($this->_position, $this->_angle);
 	}
 
 	private function repair($amount)
@@ -214,6 +255,18 @@ abstract class Ship extends Collidable
 			$this->_untilTurn = $this->getHandling();
 	}
 
+	private function debug_print_location()
+	{
+		Console::log_debug(sprintf(
+			"Ship moved to (%d, %d) angle %d (real position %d, %d)",
+			$this->getLocation()["x"],
+			$this->getLocation()["y"],
+			$this->_angle,
+			$this->_position["x"],
+			$this->_position["y"]
+		));
+	}
+
 	private function move_forward($dist)
 	{
 		$mov = array();
@@ -242,6 +295,7 @@ abstract class Ship extends Collidable
 		$this->_mp -= $dist;
 		$this->_untilTurn -= $dist;
 		// TODO This should go at the end of a move_finalize function
+		$this->debug_print_location();
 		foreach ($this->getWeapons() as $weapon)
 			$weapon->move($this->_position, $this->_angle);
 	}
@@ -259,6 +313,7 @@ abstract class Ship extends Collidable
 		// TODO Rotation into other ships (maybe considered bucaneering and the rotate is undone)
 		$this->_untilTurn = $this->getHandling();
 		// TODO This should go at the end of a move_finalize function
+		$this->debug_print_location();
 		foreach ($this->getWeapons() as $weapon)
 			$weapon->move($this->_position, $this->_angle);
 	}
@@ -336,6 +391,7 @@ abstract class Ship extends Collidable
 		if ($this->_phase == Ship::SHOOT)
 			$this->_status = Ship::DEACTIVE;
 		else if ($this->_phase == Ship::MOVE)
+			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
 			$this->_phase = Ship::SHOOT;
 		else if ($this->_phase == Ship::ORDER)
 		{

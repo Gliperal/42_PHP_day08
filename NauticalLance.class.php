@@ -41,7 +41,10 @@ class NauticalLance extends Collidable implements Weapon
 	{
 		$this->_angle = ($angle + $this->_angleOffset) % 360;
 		$this->_location = $location;
+		Console::log_debug("(" . $location["x"] . ", " . $location["y"] . ")");
 		NauticalLance::moveOnAngle($this->_location, $this->_offset, $angle);
+		Console::log_debug("(" . $this->_offset["x"] . ", " . $this->_offset["y"] . ")");
+		Console::log_debug("NauticalLance moved to (" . $this->_location["x"] . ", " . $this->_location["y"] . ")");
 	}
 
 	public function resetCP()
