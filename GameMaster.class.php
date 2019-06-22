@@ -112,6 +112,14 @@ class GameMaster
 	}
 	*/
 
+	private function checkForTurnEnd()
+	{
+		foreach ($this->_ships as $ship)
+			if ($ship->isReady() or $ship->isActive())
+				return;
+		$this->finishTurn();
+	}
+
 	public function order($orders)
 	{
 		$ship = $this->getActiveShip();
@@ -131,7 +139,10 @@ class GameMaster
 			Console::log_error("You must activate a ship before moving it.");
 			return ["error" => "You must activate a ship before moving it."];
 		}
-		return $ship->move($orders);
+		$status = $ship->move($orders, $this->_ships, $this->_obstacles);
+		if ($status == TRUE)
+			$this->checkForTurnEnd();
+		return $status;
 	}
 
 	public function attack()
@@ -183,12 +194,7 @@ class GameMaster
 		}
 		$status = $ship->finishPhase();
 		if ($status == TRUE)
-		{
-			foreach ($this->_ships as $ship)
-				if ($ship->isReady() or $ship->isActive())
-					return TRUE;
-			$this->finishTurn();
-		}
+			$this->checkForTurnEnd();
 		else
 			Console::log_error($status["error"]);
 			return $status;

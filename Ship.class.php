@@ -255,6 +255,13 @@ abstract class Ship extends Collidable
 			$this->_untilTurn = $this->getHandling();
 	}
 
+	private function move_finalize()
+	{
+		$this->debug_print_location();
+		foreach ($this->getWeapons() as $weapon)
+			$weapon->move($this->_position, $this->_angle);
+	}
+
 	private function debug_print_location()
 	{
 		Console::log_debug(sprintf(
@@ -267,59 +274,64 @@ abstract class Ship extends Collidable
 		));
 	}
 
-	private function move_forward($dist)
+	private function move_forward($ships, $obstacles)
 	{
-		$mov = array();
+		$oldPosition = $this->_position;
 		switch($this->_angle)
 		{
 		case 0:
-			$mov["x"] = $dist;
-			$mov["y"] = 0;
+			$this->_position["x"]++;
 			break;
 		case 90:
-			$mov["x"] = 0;
-			$mov["y"] = 0 - $dist;
+			$this->_position["y"]--;
 			break;
 		case 180:
-			$mov["x"] = 0 - $dist;
-			$mov["y"] = 0;
+			$this->_position["x"]--;
 			break;
 		case 270:
-			$mov["x"] = 0;
-			$mov["y"] = $dist;
+			$this->_position["y"]++;
 			break;
 		}
-		$this->_position["x"] += $mov["x"];
-		$this->_position["y"] += $mov["y"];
-		// TODO Watch out for collisions
-		$this->_mp -= $dist;
-		$this->_untilTurn -= $dist;
-		// TODO This should go at the end of a move_finalize function
-		$this->debug_print_location();
-		foreach ($this->getWeapons() as $weapon)
-			$weapon->move($this->_position, $this->_angle);
-	}
-
-	private function rotate($toAngle)
-	{
-		if ($this->_untilTurn > 0)
+		if ($this->isOOB())
+			return ["status" => "OOB"];
+		foreach ($obstacles as $obstacle)
+			if ($this->overlaps($obstacle))
+				return ["status" => "OOB"];
+		foreach ($ships as $ship)
 		{
-			Console::log_error("Your ship cannot make turns that sharp! Try moving a little first.");
-			return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
+			if ($this != $ship and $this->overlaps($ship))
+			{
+				$this->_position = $oldPosition;
+				return ["status" => "collision", "ship" => $ship];
+			}
 		}
-		$this->_angle = $toAngle;
-		// TODO Rotation into obstacles
-		// TODO Rotation into out of bounds
-		// TODO Rotation into other ships (maybe considered bucaneering and the rotate is undone)
-		$this->_untilTurn = $this->getHandling();
-		// TODO This should go at the end of a move_finalize function
-		$this->debug_print_location();
-		foreach ($this->getWeapons() as $weapon)
-			$weapon->move($this->_position, $this->_angle);
+		$this->_mp--;
+		$this->_untilTurn--;
 	}
 
-	public function move($orders)
+	private function rotate($toAngle, $ships, $obstacles)
 	{
+		$oldAngle = $this->_angle;
+		$this->_angle = $toAngle;
+		if ($this->isOOB())
+			return ["status" => "OOB"];
+		foreach ($obstacles as $obstacle)
+			if ($this->overlaps($obstacle))
+				return ["status" => "OOB"];
+		foreach ($ships as $ship)
+		{
+			if ($this != $ship and $this->overlaps($ship))
+			{
+				$this->_angle = $oldAngle;
+				return ["status" => "collision", "ship" => $ship];
+			}
+		}
+		$this->_untilTurn = $this->getHandling();
+	}
+
+	public function move($orders, $ships, $obstacles)
+	{
+		$this->move_init();
 		if ($this->_status != Ship::ACTIVE)
 		{
 			Console::log_error("Your ship must be active to move!");
@@ -348,16 +360,48 @@ abstract class Ship extends Collidable
 				Console::log_error("I'm giving her all she's got Captain!");
 				return ["error" => "I'm giving her all she's got Captain!"];
 			}
-			$this->move_forward($orders["dist"]);
-			return TRUE;
+			while ($orders["dist"] > 0)
+			{
+				$status = $this->move_forward($ships, $obstacles);
+				if ($status["status"] != "OK")
+					break ;
+				$orders["dist"]--;
+			}
+			break;
 		case "turn-left":
-			return $this->rotate(($this->_angle + 90) % 360);
+			if ($this->_untilTurn > 0)
+			{
+				Console::log_error("Your ship cannot make turns that sharp! Try moving a little first.");
+				return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
+			}
+			$status = $this->rotate(($this->_angle + 90) % 360, $ships, $obstacles);
+			break;
 		case "turn-right":
-			return $this->rotate(($this->_angle + 270) % 360);
+			if ($this->_untilTurn > 0)
+			{
+				Console::log_error("Your ship cannot make turns that sharp! Try moving a little first.");
+				return ["error" => "Your ship cannot make turns that sharp! Try moving a little first."];
+			}
+			$status = $this->rotate(($this->_angle + 270) % 360, $ships, $obstacles);
+			break;
 		default:
 			Console::log_error("'" . $orders["type"] . "' is not a valid movement type.");
 			return ["error" => "'" . $orders["type"] . "' is not a valid movement type."];
 		}
+		if ($status["status"] == "OOB")
+		{
+			Console::log_message("Your ship strayed too close to the void and was destroyed!");
+			$this->_hp = 0;
+			$this->_status = Ship::DEACTIVE;
+		}
+		if ($status["status"] == "collision")
+		{
+			Console::log_message($this->_name . " collided with " . $status["ship"]->_name . "!");
+			// TODO collide with $status["ship"]
+			$this->_stationary = true;
+			$this->_phase = Ship::SHOOT;
+		}
+		return TRUE;
 	}
 
 	public function shoot($ships, $obstacles)
@@ -391,13 +435,13 @@ abstract class Ship extends Collidable
 		if ($this->_phase == Ship::SHOOT)
 			$this->_status = Ship::DEACTIVE;
 		else if ($this->_phase == Ship::MOVE)
-			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
-			$this->_phase = Ship::SHOOT;
-		else if ($this->_phase == Ship::ORDER)
 		{
-			$this->_phase = Ship::MOVE;
-			$this->move_init();
+			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
+			$this->move_finalize();
+			$this->_phase = Ship::SHOOT;
 		}
+		else if ($this->_phase == Ship::ORDER)
+			$this->_phase = Ship::MOVE;
 		return TRUE;
 	}
 
