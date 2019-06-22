@@ -37,9 +37,15 @@ if (!array_key_exists('master', $_SESSION))
 				display:			flex-wrap;
 				overflow:			hidden;
 				width:				30%;
-				background-color:	white;
+				background-color:	black;
 				border-style:		solid;
 				border-color:		white;
+			}
+			p.log-msg {
+				color:				white;
+			}
+			p.log-err {
+				color:				red;
 			}
 			div.Align-Bottom {
 				display: flex;
@@ -86,7 +92,7 @@ if (!array_key_exists('master', $_SESSION))
 				<form class="radio" action="active.php" method="post">
 <?php
 $game = $_SESSION['master'];
-foreach($game->_ships as $ship)
+foreach($game->getReadyShips() as $ship)
 {
 	$name = $ship->getName();
 	if ($ship instanceof ImperialIronclad)
@@ -146,7 +152,6 @@ if ($currentShip != False)
 			<div class="end">
 <?php
 include_once("Console.class.php");
-session_start();
 echo Console::log_to_HTML();
 ?>
 			</div>

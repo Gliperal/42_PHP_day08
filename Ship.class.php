@@ -391,6 +391,7 @@ abstract class Ship extends Collidable
 		if ($this->_phase == Ship::SHOOT)
 			$this->_status = Ship::DEACTIVE;
 		else if ($this->_phase == Ship::MOVE)
+			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
 			$this->_phase = Ship::SHOOT;
 		else if ($this->_phase == Ship::ORDER)
 		{

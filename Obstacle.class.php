@@ -27,6 +27,22 @@ class Obstacle extends Collidable
 	{
 		return $this->_size;
 	}
+
+	public function toHTML()
+	{
+		$loc = $this->_loc;
+		$size = $this->_size;
+		echo "<div";
+		echo " style=\"";
+			echo "position: absolute;";
+			echo "left: " . 100 * $loc["x"] / 150 . "%;";
+			echo "top: " . 100 * $loc["y"] / 100 . "%;";
+			echo "width: " . 100 * $size["x"] / 150 . "%;";
+			echo "height: " . 100 * $size["y"] / 100 . "%;";
+			echo "background-color: rgba(255, 64, 64, 0.5);";
+		echo "\"";
+		echo "></div>";
+	}
 }
 
 ?>

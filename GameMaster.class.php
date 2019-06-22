@@ -8,7 +8,7 @@ include_once("Console.class.php");
 class GameMaster
 {
 	private $_currentPlayer;
-	public $_ships;
+	private $_ships;
 	private $_obstacles;
 
 	public function __construct()
@@ -16,12 +16,24 @@ class GameMaster
 		Console::clear();
 		$this->_ships =
 		[
-			new ImperialIronclad("Bob", 0, ["x" => 0, "y" => 0], 0),
-			new ImperialIronclad("Steve", 1, ["x" => 10, "y" => 10], 90)
+			// Player 1 ships
+			new ImperialIronclad("Annihilator", 0, ["x" => 20, "y" => 10], 0),
+			new ImperialIronclad("B.O.B.", 0, ["x" => 10, "y" => 20], 270),
+			// Player 2 ships
+			new ImperialIronclad("Crusher", 1, ["x" => 130, "y" => 90], 180),
+			new ImperialIronclad("Demolisher", 1, ["x" => 140, "y" => 80], 90)
 		];
 		$this->_obstacles =
 		[
-			new Obstacle(70, 45, 10, 10)
+			new Obstacle(68, 42, 14, 16),
+			new Obstacle(66, 40, 10, 1),
+			new Obstacle(74, 59, 10, 1),
+			new Obstacle(59, 55, 2, 6),
+			new Obstacle(89, 39, 2, 6),
+			new Obstacle(31, 73, 9, 3),
+			new Obstacle(110, 24, 9, 3),
+			new Obstacle(99, 64, 2, 2),
+			new Obstacle(49, 34, 2, 2),
 		];
 		$this->_currentPlayer = 1;
 		$this->finishTurn();
@@ -60,6 +72,25 @@ class GameMaster
 			}
 		Console::log_error("You have no ship by that name!");
 		return ["error" => "You have no ship by that name!"];
+	}
+
+	public function getObstacles()
+	{
+		return $this->_obstacles;
+	}
+
+	public function getShips()
+	{
+		return $this->_ships;
+	}
+
+	public function getReadyShips()
+	{
+		$ships = array();
+		foreach ($this->_ships as $ship)
+			if ($ship->isReady())
+				$ships[] = $ship;
+		return $ships;
 	}
 
 	public function getActiveShip()
