@@ -1,0 +1,88 @@
+<- Ship ------------------------------------------------------------------------
+The Ship class creates the parent class for the different types of 
+ships in Awesome Battleships Battles game.
+
+An instance is constructed with:
+	new Ship( 'name', $playernumber, [x,y] position, angle);
+
+The class provides the following abstract methods to be implemented in
+child ship classes:
+    protected abstract function getMaxHP();
+    protected abstract function getEP();
+    protected abstract function getSpeed();
+    protected abstract function getHandling();
+    protected abstract function getBaseShield();
+    protected abstract function getWeapons();
+
+The class provides the following methods:
+
+toTotleTag( );
+Retruns a formatted string that includes the Name, Position, Angle, HP,
+shield health, Power Points, Charge Points, and Move Points.
+
+toHTML();
+Writes HTML to the page to place the instance of the ship on the map.
+
+belongsTo( $player );
+Returns a boolean value. TRUE if the Ship->_player is the same value as the
+$player number passed to it.
+
+getLocation();
+Returns and array with the 'X' and 'Y' position of the Ship.
+
+getName();
+Returns a string of the name of the Ship.
+
+isReady();
+Returns a boolean value. TRUE if the Ship is in the movement phase.
+
+isActive();
+Returns a boolean value. TRUE if the Ship is the current active Ship.
+
+isInactive();
+Returns a boolean value. TRUE if the Ship is not the current active Ship.
+
+ready();
+Sets the ship status to Ready.
+
+getPP();
+Returns the amount of Power Points available for the Ship.
+
+active();
+Sets the ship status to Active, resets the Order Points to their base value.
+
+repair( $amount );
+Rolls an $amount of dice to attempt to repair the ships hull;
+
+SpeedUp( $amout );
+Rolls an $amount of dice to increase the movement the ship has this turn.
+
+order( $orders );
+Allocates Power Points to where they were distributed during the
+Order Phase.
+
+move_init();
+Sets the amount of Moves forward required until a turn may be made.
+
+move_forward( $dist );
+Moves a Ship along the board in the direction it is facing.
+
+rotate( $toAngle );
+Rotates the ship to a specified angle, 0, 90, 180, or 270.
+
+move( $orders );
+Controls the different types of movement that this ship can perform.
+'turn-left', 'turn-right', and 'move'.
+
+shoot( $ships, $obstacles );
+Performs the "shoot" action.
+
+finishPhase();
+Switches ot the next phase from: Order -> Movement -> Attack -> Next Player
+
+isDead();
+Checks if a Ships health is 0.
+
+takeDamage();
+Applies damage dealt to this Ship.
+------------------------------------------------------------------------ Ship ->

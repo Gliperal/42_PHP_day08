@@ -1,0 +1,15 @@
+<- Obstacle --------------------------------------------------------------------
+The Obstacle class is a child class of Collodable type.
+
+An instance is constructed with:
+	new Obstacle();
+
+The following functions are available:
+
+getLocation();
+Returns the [ 'X', 'Y' ] location of the Obstacle.
+
+getSize();
+Returns the [ 'X', 'Y' ] size of an Obstacle.
+
+------------------------------------------------------------------- Obstacle ->
