@@ -16,8 +16,8 @@ class GameMaster
 		Console::clear();
 		$this->_ships =
 		[
-			new ImperialIronclad("Bob", 0, ["x" => 10, "y" => 10], 0),
-			new ImperialIronclad("Steve", 1, ["x" => 30, "y" => 30], 90)
+			new ImperialIronclad("Bob", 0, ["x" => 0, "y" => 0], 0),
+			new ImperialIronclad("Steve", 1, ["x" => 10, "y" => 10], 90)
 		];
 		$this->_obstacles =
 		[
