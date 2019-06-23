@@ -11,5 +11,7 @@ if (is_array($game))
 	Console::log_error($game["error"]);
 else
 	$game->activateShip($_POST['name']);
-saveGame();
+$status = saveGame();
+if ($status !== TRUE)
+	Console::log_error($status["error"]);
 ?>

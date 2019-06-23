@@ -4,6 +4,7 @@ include_once("dice.php");
 include_once("escape.php");
 include_once("Collidable.class.php");
 
+// TODO Weapon locations won't update on collision with another ship
 abstract class Ship extends Collidable
 {
 	private $_player;
@@ -46,11 +47,14 @@ abstract class Ship extends Collidable
 	public function __toString()
 	{
 		$loc = $this->getLocation();
-		return sprintf("Ship[\"%s\" (%d,%d) facing %d | HP %d(%d) | PP %d | CP %d | MP %d ]",
+		return sprintf("Ship[\"%s\" of %d (%d,%d) facing %d | status %d:%d | HP %d(%d) | PP %d | CP %d | MP %d ]",
+			$this->_player,
 			$this->_name,
 			$loc["x"],
 			$loc["y"],
 			$this->_angle,
+			$this->_status,
+			$this->_phase,
 			$this->_hp,
 			$this->_shield,
 			$this->_pp,
@@ -92,6 +96,11 @@ abstract class Ship extends Collidable
 	public function belongsTo($player)
 	{
 		return $this->_player == $player;
+	}
+
+	public function getPlayer()
+	{
+		return $this->_player;
 	}
 
 	protected function getSize()

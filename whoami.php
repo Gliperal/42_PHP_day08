@@ -2,7 +2,7 @@
 
 function whoami()
 {
-	return "Dirk";
+	return "Alice";
 }
 
 ?>

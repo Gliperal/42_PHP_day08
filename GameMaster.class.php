@@ -103,10 +103,14 @@ class GameMaster
 
 	public function getReadyShips()
 	{
+//		Console::log_debug("getReadyShips(): total ships " . count($this->_ships));
 		$ships = array();
 		foreach ($this->_ships as $ship)
+		{
+//			Console::log_debug($ship);
 			if ($ship->isReady())
 				$ships[] = $ship;
+		}
 		return $ships;
 	}
 
@@ -191,37 +195,28 @@ class GameMaster
 			}
 			$i++;
 		}
-		if ($allShipsDestroyed)
-			// TODO
-			Console::log_message("You win!");
 	}
 
-	//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
-	private function winner()
+	public function winner()
 	{
-		$winner = -1;
+		$winner = FALSE;
 		foreach ($this->_ships as $ship)
 		{
-			if ($ship->belongsTo($this->_currentPlayer))
-			{
-				$allShipsDestroyed = FALSE;
-				$ship->ready();
-			}
+			if ($winner === FALSE)
+				$winner = $ship->getPlayer();
+			else if (!$ship->belongsTo($winner))
+				return FALSE;
 		}
+		return $this->_players[$winner];
 	}
-
-	//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
 	private function finishTurn()
 	{
 		$this->updateDeadShips();
-		$winner = $this->winner();
-		if ($winner !== FALSE)
-		{
-			Console::log_message($this->_players[$winner] . " wins!");
-			return;
-		}
 		$this->_currentPlayer = ($this->_currentPlayer + 1) % count($this->_players);
+		foreach ($this->_ships as $ship)
+			if ($ship->belongsTo($this->_currentPlayer))
+				$ship->ready();
 	}
 
 	public function finishPhase()

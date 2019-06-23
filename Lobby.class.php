@@ -1,6 +1,7 @@
 <?php
 
 include_once("GameMaster.class.php");
+include_once("stats.php");
 
 class Lobby
 {
@@ -8,6 +9,7 @@ class Lobby
 	private $_players;
 	private $_gameMaster;
 	private $_locked = FALSE;
+	private $_ended = FALSE;
 
 	public function __construct($host)
 	{
@@ -66,10 +68,30 @@ class Lobby
 			return ["error" => "The game hasn't started yet!"];
 	}
 
+	public function checkVictory()
+	{
+		if ($this->_ended)
+			return;
+		$winner = $this->_gameMaster->winner();
+		if ($winner !== FALSE)
+		{
+			Console::log_message($winner . " wins!");
+			$status = stats_addWinner($winner);
+			if ($status !== TRUE)
+				Console::log_error($status["error"]);
+			$this->_ended = TRUE;
+//			$this->_gameMaster = null;
+		}
+	}
+
 	// TODO This is an ugly hack solution and it should be burned as soon as possible
 	public function setGameMaster($gm)
 	{
+		if ($this->_ended)
+			return ["error" => "That game is over."];
 		$this->_gameMaster = $gm;
+		$this->checkVictory();
+		return TRUE;
 	}
 }
 

@@ -26,7 +26,9 @@ function saveGame()
 	foreach ($lobbies as $id=>$lobby)
 		if ($id == $_SESSION["lobby_id"])
 		{
-			$lobby->setGameMaster($_SESSION["lobby_gm"]);
+			$status = $lobby->setGameMaster($_SESSION["lobby_gm"]);
+			if ($status !== TRUE)
+				return $status;
 			if (save_data("lobbies.txt", $lobbies))
 				return TRUE;
 			else
