@@ -1,5 +1,10 @@
 ._DS*
 .*.swp
 .*.swo
+.*.html
+*DS_Store*
+home.html
 resources/.*
 resources/images/.*
+private/
+test*

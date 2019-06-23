@@ -4,6 +4,7 @@ include_once("dice.php");
 include_once("escape.php");
 include_once("Collidable.class.php");
 
+// TODO Weapon locations won't update on collision with another ship
 abstract class Ship extends Collidable
 {
 	private $_player;
@@ -46,11 +47,14 @@ abstract class Ship extends Collidable
 	public function __toString()
 	{
 		$loc = $this->getLocation();
-		return sprintf("Ship[\"%s\" (%d,%d) facing %d | HP %d(%d) | PP %d | CP %d | MP %d ]",
+		return sprintf("Ship[\"%s\" of %d (%d,%d) facing %d | status %d:%d | HP %d(%d) | PP %d | CP %d | MP %d ]",
+			$this->_player,
 			$this->_name,
 			$loc["x"],
 			$loc["y"],
 			$this->_angle,
+			$this->_status,
+			$this->_phase,
 			$this->_hp,
 			$this->_shield,
 			$this->_pp,
@@ -76,7 +80,7 @@ abstract class Ship extends Collidable
 		$size = $this->getSize();
 		$loc = $this->getLocation();
 		echo "<img";
-		echo " src=\"https://via.placeholder.com/350x150\"";
+		echo " src=\"/resources/images/ship_1_" . $this->_angle . ".png\"";
 		echo " width=\"" . 100 * $size["x"] / 150 . "%\"";
 		echo " height=\"" . 100 * $size["y"] / 100 . "%\"";
 		echo " title=\"" . $this->toTitleTag() . "\"";
@@ -92,6 +96,11 @@ abstract class Ship extends Collidable
 	public function belongsTo($player)
 	{
 		return $this->_player == $player;
+	}
+
+	public function getPlayer()
+	{
+		return $this->_player;
 	}
 
 	protected function getSize()
@@ -331,7 +340,6 @@ abstract class Ship extends Collidable
 
 	public function move($orders, $ships, $obstacles)
 	{
-		$this->move_init();
 		if ($this->_status != Ship::ACTIVE)
 		{
 			Console::log_error("Your ship must be active to move!");
@@ -433,15 +441,23 @@ abstract class Ship extends Collidable
 			return ["error" => "Your ship must be active to do that!"];
 		}
 		if ($this->_phase == Ship::SHOOT)
+		{
+			Console::log_message("Finished all phases. Deactivating.");
 			$this->_status = Ship::DEACTIVE;
+		}
 		else if ($this->_phase == Ship::MOVE)
 		{
 			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
 			$this->move_finalize();
+			Console::log_message("Switching to attack phase.");
 			$this->_phase = Ship::SHOOT;
 		}
 		else if ($this->_phase == Ship::ORDER)
+		{
+			$this->move_init();
+			Console::log_message("Switching to movement phase.");
 			$this->_phase = Ship::MOVE;
+		}
 		return TRUE;
 	}
 

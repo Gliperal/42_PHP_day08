@@ -4,16 +4,20 @@ include_once("Ship.class.php");
 include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
 include_once("Obstacle.class.php");
 include_once("Console.class.php");
+include_once("validateUser.php");
 
 class GameMaster
 {
+	private $_players;
 	private $_currentPlayer;
 	private $_ships;
 	private $_obstacles;
 
-	public function __construct()
+	public function __construct($players)
 	{
 		Console::clear();
+		$this->_players = $players;
+		// TODO Construct more ships when there's more than 2 players.
 		$this->_ships =
 		[
 			// Player 1 ships
@@ -35,7 +39,7 @@ class GameMaster
 			new Obstacle(99, 64, 2, 2),
 			new Obstacle(49, 34, 2, 2),
 		];
-		$this->_currentPlayer = 1;
+		$this->_currentPlayer = count($_players) - 1;
 		$this->finishTurn();
 	}
 
@@ -48,8 +52,21 @@ class GameMaster
 		return file_get_contents("GameMaster.doc.txt");
 	}
 
+	private function validate()
+	{
+		$playerName = $this->_players[$this->_currentPlayer];
+		if (validateUser($playerName))
+			return TRUE;
+		else
+		{
+			Console::log_error("It is " . $playerName . "'s turn to move right now. If this is you, make sure you are logged in.");
+			return FALSE;
+		}
+	}
+
 	public function activateShip($name)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
 			{
@@ -70,7 +87,7 @@ class GameMaster
 					return ["error" => "That ship does not belong to you."];
 				}
 			}
-		Console::log_error("You have no ship by that name!");
+		Console::log_error("You have no ship by the name " . $name . "!");
 		return ["error" => "You have no ship by that name!"];
 	}
 
@@ -86,10 +103,14 @@ class GameMaster
 
 	public function getReadyShips()
 	{
+//		Console::log_debug("getReadyShips(): total ships " . count($this->_ships));
 		$ships = array();
 		foreach ($this->_ships as $ship)
+		{
+//			Console::log_debug($ship);
 			if ($ship->isReady())
 				$ships[] = $ship;
+		}
 		return $ships;
 	}
 
@@ -122,6 +143,7 @@ class GameMaster
 
 	public function order($orders)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -133,6 +155,7 @@ class GameMaster
 
 	public function move($orders)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -147,6 +170,7 @@ class GameMaster
 
 	public function attack()
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -156,10 +180,8 @@ class GameMaster
 		return $ship->shoot($this->_ships, $this->_obstacles);
 	}
 
-	private function finishTurn()
+	private function updateDeadShips()
 	{
-		$this->_currentPlayer = 1 - $this->_currentPlayer;
-		$allShipsDestroyed = TRUE;
 		$i = 0;
 		while ($i < count($this->_ships))
 		{
@@ -171,20 +193,35 @@ class GameMaster
 				array_splice($this->_ships, $i, 1);
 				continue;
 			}
-			if ($ship->belongsTo($this->_currentPlayer))
-			{
-				$allShipsDestroyed = FALSE;
-				$ship->ready();
-			}
 			$i++;
 		}
-		if ($allShipsDestroyed)
-			// TODO
-			Console::log_message("You win!");
+	}
+
+	public function winner()
+	{
+		$winner = FALSE;
+		foreach ($this->_ships as $ship)
+		{
+			if ($winner === FALSE)
+				$winner = $ship->getPlayer();
+			else if (!$ship->belongsTo($winner))
+				return FALSE;
+		}
+		return $this->_players[$winner];
+	}
+
+	private function finishTurn()
+	{
+		$this->updateDeadShips();
+		$this->_currentPlayer = ($this->_currentPlayer + 1) % count($this->_players);
+		foreach ($this->_ships as $ship)
+			if ($ship->belongsTo($this->_currentPlayer))
+				$ship->ready();
 	}
 
 	public function finishPhase()
 	{
+		if (!$this->validate()) return ["error" => ""];
 		Console::log_debug("finishPhase()");
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)

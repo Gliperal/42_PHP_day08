@@ -2,7 +2,7 @@
 The GameMaster class stores a session of an Awesome Battleships Battles game.
 
 An instance is constructed with:
-	new GameMaster();
+	new GameMaster( array("Player Name 1", "Player Name 2", ...) );
 
 The class provides the following methods. All of the following methods return
 TRUE on success and an array storing the error message under a key "error" on
