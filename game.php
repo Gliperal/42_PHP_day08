@@ -3,8 +3,6 @@ require_once 'GameMaster.class.php';
 require_once 'Ship.class.php';
 require_once 'ImperialIronclad.class.php';
 session_start();
-if (!array_key_exists('master', $_SESSION))
-	header('Location: install.php');
 ?>
 <html>
 	<head>
