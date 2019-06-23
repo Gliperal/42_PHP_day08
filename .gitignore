@@ -1,5 +1,7 @@
 ._DS*
 .*.swp
 .*.swo
+.*.html
 resources/.*
 resources/images/.*
+test*

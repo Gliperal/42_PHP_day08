@@ -4,9 +4,11 @@ include_once("Ship.class.php");
 include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
 include_once("Obstacle.class.php");
 include_once("Console.class.php");
+include_once("validateUser.php");
 
 class GameMaster
 {
+	private $_players = ["Bob Cannon", "James"];
 	private $_currentPlayer;
 	private $_ships;
 	private $_obstacles;
@@ -48,8 +50,21 @@ class GameMaster
 		return file_get_contents("GameMaster.doc.txt");
 	}
 
+	private function validate()
+	{
+		$playerName = $this->_players[$this->_currentPlayer];
+		if (validateUser($playerName))
+			return TRUE;
+		else
+		{
+			Console::log_error("It is " . $playerName . "'s turn to move right now. If this is you, make sure you are logged in.");
+			return FALSE;
+		}
+	}
+
 	public function activateShip($name)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		foreach ($this->_ships as $ship)
 			if ($ship->isActive())
 			{
@@ -70,7 +85,7 @@ class GameMaster
 					return ["error" => "That ship does not belong to you."];
 				}
 			}
-		Console::log_error("You have no ship by that name!");
+		Console::log_error("You have no ship by the name " . $name . "!");
 		return ["error" => "You have no ship by that name!"];
 	}
 
@@ -122,6 +137,7 @@ class GameMaster
 
 	public function order($orders)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -133,6 +149,7 @@ class GameMaster
 
 	public function move($orders)
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -147,6 +164,7 @@ class GameMaster
 
 	public function attack()
 	{
+		if (!$this->validate()) return ["error" => ""];
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
 		{
@@ -185,6 +203,7 @@ class GameMaster
 
 	public function finishPhase()
 	{
+		if (!$this->validate()) return ["error" => ""];
 		Console::log_debug("finishPhase()");
 		$ship = $this->getActiveShip();
 		if ($ship === FALSE)
