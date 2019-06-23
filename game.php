@@ -11,6 +11,7 @@ session_start();
 			body {
 				min-height: 100%;
 				min-width: 100%;
+				margin: 0px;
 				background-color: black;
 			}
 			div.Aligner {
@@ -25,6 +26,7 @@ session_start();
 				background-color:	black;
 				border-style:		solid;
 				border-color:		#888;
+				padding:			5px;
 			}
 			div.small {
 				display: flex;
@@ -32,14 +34,16 @@ session_start();
 				background-color:	black;
 				border-style:		solid;
 				border-color:		#888;
+				padding:			5px;
 			}
 			div.end {
 				display:			flex-wrap;
 				overflow:			hidden;
-				width:				25%;
+				width:				auto;
 				background-color:	black;
 				border-style:		solid;
 				border-color:		#888;
+				padding:			5px;
 			}
 			p.log-msg {
 				color:				white;
