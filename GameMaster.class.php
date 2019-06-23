@@ -176,10 +176,8 @@ class GameMaster
 		return $ship->shoot($this->_ships, $this->_obstacles);
 	}
 
-	private function finishTurn()
+	private function updateDeadShips()
 	{
-		$this->_currentPlayer = ($this->_currentPlayer + 1) % count($this->_players);
-		$allShipsDestroyed = TRUE;
 		$i = 0;
 		while ($i < count($this->_ships))
 		{
@@ -191,16 +189,39 @@ class GameMaster
 				array_splice($this->_ships, $i, 1);
 				continue;
 			}
-			if ($ship->belongsTo($this->_currentPlayer))
-			{
-				$allShipsDestroyed = FALSE;
-				$ship->ready();
-			}
 			$i++;
 		}
 		if ($allShipsDestroyed)
 			// TODO
 			Console::log_message("You win!");
+	}
+
+	//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+	private function winner()
+	{
+		$winner = -1;
+		foreach ($this->_ships as $ship)
+		{
+			if ($ship->belongsTo($this->_currentPlayer))
+			{
+				$allShipsDestroyed = FALSE;
+				$ship->ready();
+			}
+		}
+	}
+
+	//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+	private function finishTurn()
+	{
+		$this->updateDeadShips();
+		$winner = $this->winner();
+		if ($winner !== FALSE)
+		{
+			Console::log_message($this->_players[$winner] . " wins!");
+			return;
+		}
+		$this->_currentPlayer = ($this->_currentPlayer + 1) % count($this->_players);
 	}
 
 	public function finishPhase()
