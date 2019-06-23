@@ -5,4 +5,5 @@
 home.html
 resources/.*
 resources/images/.*
+private/
 test*
