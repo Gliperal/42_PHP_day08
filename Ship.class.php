@@ -340,7 +340,6 @@ abstract class Ship extends Collidable
 
 	public function move($orders, $ships, $obstacles)
 	{
-		$this->move_init();
 		if ($this->_status != Ship::ACTIVE)
 		{
 			Console::log_error("Your ship must be active to move!");
@@ -442,15 +441,23 @@ abstract class Ship extends Collidable
 			return ["error" => "Your ship must be active to do that!"];
 		}
 		if ($this->_phase == Ship::SHOOT)
+		{
+			Console::log_message("Finished all phases. Deactivating.");
 			$this->_status = Ship::DEACTIVE;
+		}
 		else if ($this->_phase == Ship::MOVE)
 		{
 			// TODO Make sure the ship has travelled a distance at least equal to its handling if not stationary
 			$this->move_finalize();
+			Console::log_message("Switching to attack phase.");
 			$this->_phase = Ship::SHOOT;
 		}
 		else if ($this->_phase == Ship::ORDER)
+		{
+			$this->move_init();
+			Console::log_message("Switching to movement phase.");
 			$this->_phase = Ship::MOVE;
+		}
 		return TRUE;
 	}
 
