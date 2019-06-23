@@ -11,6 +11,7 @@ session_start();
 			body {
 				min-height: 100%;
 				min-width: 100%;
+				background-color: black;
 			}
 			div.Aligner {
 				display: flex;
@@ -23,22 +24,22 @@ session_start();
 				width:	15%;
 				background-color:	black;
 				border-style:		solid;
-				border-color:		white;
+				border-color:		#888;
 			}
 			div.small {
 				display: flex;
 				width:	10%;
 				background-color:	black;
 				border-style:		solid;
-				border-color:		white;
+				border-color:		#888;
 			}
 			div.end {
 				display:			flex-wrap;
 				overflow:			hidden;
-				width:				30%;
+				width:				25%;
 				background-color:	black;
 				border-style:		solid;
-				border-color:		white;
+				border-color:		#888;
 			}
 			p.log-msg {
 				color:				white;
@@ -48,8 +49,7 @@ session_start();
 			}
 			div.Align-Bottom {
 				display: flex;
-				width:		10%
-				align-items: left;
+				width:		100%;
 				justify-content: flex-start;
 			}
 			div.Iframe {
