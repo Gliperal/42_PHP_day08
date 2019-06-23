@@ -6,7 +6,7 @@
 
 body
 {
-	background-image: url("resources/images/background.jpg");
+	background-image: url("resources/images/space_background.png");
 	background-size: 100% 100%;
 }
 

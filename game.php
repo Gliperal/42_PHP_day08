@@ -65,7 +65,8 @@ session_start();
 				width: 100%;
 				height: 100%;
 				position: relative;
-				background-image: url("resources/images/background.jpg");
+				/* background-image: url("resources/images/background.jpg"); */
+				background-image: url("resources/images/space_background.png");
 				background-size: 100% 100%;
 			}
 			iframe {

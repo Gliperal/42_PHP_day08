@@ -4,7 +4,13 @@
 		<style>
 
 
-div.lobby-open, div.lobby-closed, div.new
+body
+{
+	background-image: url("resources/images/space_background.png");
+	background-size: 100% 100%;
+}
+
+div.lobby-open, div.lobby-closed, div.lobby-over, div.new
 {
 	border: 2px solid black;
 	border-radius: 2px;
@@ -16,13 +22,19 @@ div.lobby-open, div.lobby-closed, div.new
 
 div.lobby-open
 {
-	background-color: #BDB;
+	background: rgba(187, 221, 187, 0.7); #BDB;
 	color: black;
 }
 
 div.lobby-closed
 {
-	background-color: #DBB;
+	background: rgba(221, 221, 187, 0.7); #BDB;
+	color: black;
+}
+
+div.lobby-over
+{
+	background: rgba(221, 187, 187, 0.7); #BDB;
 	color: black;
 }
 
@@ -33,6 +45,7 @@ div.new
 	margin-right: auto;
 	max-width: 200px;
 	color: black;
+	background: rgba(136, 136, 221, 0.7); #BDB;
 	background-color: #88D;
 }
 
@@ -57,11 +70,16 @@ if (load_data("lobbies.txt", $lobbies) === FALSE)
 	exit(errorPage("Failed to load server files."));
 foreach ($lobbies as $id=>$lobby)
 {
-	if ($lobby->isReady())
-		$href = "game.php?id=" . $id;
+	if ($lobby->isOver())
+		echo $lobby->toHTML() . "<br/>";
 	else
-		$href = "joinLobby.php?id=" . $id;
-	echo "<a class=\"lobby-link\" href=\"" . $href . "\">" . $lobby->toHTML() . "</a><br/>";
+	{
+		if ($lobby->isReady())
+			$href = "game.php?id=" . $id;
+		else
+			$href = "joinLobby.php?id=" . $id;
+		echo "<a class=\"lobby-link\" href=\"" . $href . "\">" . $lobby->toHTML() . "</a><br/>";
+	}
 }
 
 ?>

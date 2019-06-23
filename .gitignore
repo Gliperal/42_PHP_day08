@@ -2,6 +2,7 @@
 .*.swp
 .*.swo
 .*.html
+*DS_Store*
 home.html
 resources/.*
 resources/images/.*

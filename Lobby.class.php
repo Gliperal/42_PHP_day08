@@ -34,6 +34,11 @@ class Lobby
 		return $this->_locked;
 	}
 
+	public function isOver()
+	{
+		return $this->_ended;
+	}
+
 	public function playersLeft()
 	{
 		return $this->_size - count($this->_players);
@@ -41,7 +46,9 @@ class Lobby
 
 	public function toHTML()
 	{
-		if ($this->_locked)
+		if ($this->_ended)
+			$html = "<div class=\"lobby-over\">";
+		else if ($this->_locked)
 			$html = "<div class=\"lobby-closed\">";
 		else
 			$html = "<div class=\"lobby-open\">";
@@ -53,7 +60,9 @@ class Lobby
 			$html .= $this->_players[$i];
 		}
 		$html .= ".";
-		if ($this->_locked)
+		if ($this->_ended)
+			$html .= " Game over."; // TODO "___ won."
+		else if ($this->_locked)
 			$html .= " Game in session. Click to view.";
 		else
 			$html .= " Awaiting " . $this->playersLeft() . " more. Click to join.";

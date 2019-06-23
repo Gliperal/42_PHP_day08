@@ -80,7 +80,7 @@ abstract class Ship extends Collidable
 		$size = $this->getSize();
 		$loc = $this->getLocation();
 		echo "<img";
-		echo " src=\"https://via.placeholder.com/350x150\"";
+		echo " src=\"/resources/images/ship_1_" . $this->_angle . ".png\"";
 		echo " width=\"" . 100 * $size["x"] / 150 . "%\"";
 		echo " height=\"" . 100 * $size["y"] / 100 . "%\"";
 		echo " title=\"" . $this->toTitleTag() . "\"";
