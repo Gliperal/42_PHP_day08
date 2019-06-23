@@ -22,7 +22,7 @@ class Lobby
 		if (count($this->_players) == $this->_size)
 		{
 			$this->_locked = TRUE;
-			$_gameMaster = new GameMaster();
+			$this->_gameMaster = new GameMaster($this->_players);
 		}
 		return TRUE;
 	}
@@ -56,6 +56,20 @@ class Lobby
 		else
 			$html .= " Awaiting " . $this->playersLeft() . " more. Click to join.";
 		return $html . "</div>";
+	}
+
+	public function getGameMaster()
+	{
+		if ($this->_locked and $this->_gameMaster != null)
+			return $this->_gameMaster;
+		else
+			return ["error" => "The game hasn't started yet!"];
+	}
+
+	// TODO This is an ugly hack solution and it should be burned as soon as possible
+	public function setGameMaster($gm)
+	{
+		$this->_gameMaster = $gm;
 	}
 }
 

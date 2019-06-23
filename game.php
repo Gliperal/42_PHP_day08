@@ -89,7 +89,7 @@ session_start();
 			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			crossorigin="anonymous">
 		</script>
-		<script src="index.js"></script>
+		<script src="game.js"></script>
 	</head>
 	<body>
 		<div class="Iframe">

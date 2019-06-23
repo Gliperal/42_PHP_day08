@@ -3,6 +3,7 @@
 include_once("whoami.php");
 include_once("fileData.php");
 include_once("errorPage.php");
+//include_once("GameMaster.class.php");
 include_once("Lobby.class.php");
 
 session_start();

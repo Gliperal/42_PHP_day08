@@ -8,14 +8,16 @@ include_once("validateUser.php");
 
 class GameMaster
 {
-	private $_players = ["Bob Cannon", "James"];
+	private $_players;
 	private $_currentPlayer;
 	private $_ships;
 	private $_obstacles;
 
-	public function __construct()
+	public function __construct($players)
 	{
 		Console::clear();
+		$this->_players = $players;
+		// TODO Construct more ships when there's more than 2 players.
 		$this->_ships =
 		[
 			// Player 1 ships
@@ -37,7 +39,7 @@ class GameMaster
 			new Obstacle(99, 64, 2, 2),
 			new Obstacle(49, 34, 2, 2),
 		];
-		$this->_currentPlayer = 1;
+		$this->_currentPlayer = count($_players) - 1;
 		$this->finishTurn();
 	}
 
@@ -176,7 +178,7 @@ class GameMaster
 
 	private function finishTurn()
 	{
-		$this->_currentPlayer = 1 - $this->_currentPlayer;
+		$this->_currentPlayer = ($this->_currentPlayer + 1) % count($this->_players);
 		$allShipsDestroyed = TRUE;
 		$i = 0;
 		while ($i < count($this->_ships))
