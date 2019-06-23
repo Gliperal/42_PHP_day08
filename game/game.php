@@ -66,7 +66,7 @@ session_start();
 				height: 100%;
 				position: relative;
 				/* background-image: url("resources/images/background.jpg"); */
-				background-image: url("resources/images/space_background.png");
+				background-image: url("/resources/images/space_background.png");
 				background-size: 100% 100%;
 			}
 			iframe {
@@ -109,13 +109,13 @@ session_start();
 			<div class="normal">
 				<div class="orders">
 					<p>Speed:</p>
-					<button onclick='sendGet("plusSpeed.php")'><img class="pl" src="resources/images/plus_button.png" /></button>
+					<button onclick='sendGet("plusSpeed.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
 					<p>Weapon:</p>
-					<button onclick='sendGet("plusWeapon.php")'><img class="pl" src="resources/images/plus_button.png" /></button>
+					<button onclick='sendGet("plusWeapon.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
 					<p>Shield:</p>
-					<button onclick='sendGet("plusShield.php")'><img class="pl" src="resources/images/plus_button.png" /></button>
+					<button onclick='sendGet("plusShield.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
 					<p>Repair:</p>
-					<button onclick='sendGet("plusRepair.php")'><img class="pl" src="resources/images/plus_button.png" /></button>
+					<button onclick='sendGet("plusRepair.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
 				</div>
 <!--?php
 $currentShip = $game->getActiveShip();
@@ -127,12 +127,12 @@ if ($currentShip != False)
 ?-->
 			</div>
 			<div class="normal">
-				<button onclick='sendGet("moveOrderLeft.php")'><img class="pl" src="resources/images/turn_left.png" /></button><br/><br/>
-				<button onclick='sendGet("moveOrderRight.php")'><img class="pl" src="resources/images/turn_right.png" /></button><br/><br/>
+				<button onclick='sendGet("moveOrderLeft.php")'><img class="pl" src="/resources/images/turn_left.png" /></button><br/><br/>
+				<button onclick='sendGet("moveOrderRight.php")'><img class="pl" src="/resources/images/turn_right.png" /></button><br/><br/>
 				<button onclick='sendGet("moveOrderForward.php")'>Forward</button>
 			</div>
 			<div class="normal">
-				<button onclick='sendGet("attack.php")'><img class="fire" src="resources/images/fire.png" /></button>
+				<button onclick='sendGet("attack.php")'><img class="fire" src="/resources/images/fire.png" /></button>
 			</div>
 			<div class="small">
 				<div>
