@@ -5,9 +5,8 @@ echo"<!DOCTYPE html>
 <html lang='en'>
 	<head>
 		<meta charset='UTF-8' />
-		<title>Dog Wash</title>
-		<link href='../css/header.css' rel='stylesheet' type='text/css' />
-		<link href='../css/styles.css' rel='stylesheet' type='text/css' />
+		
+
 	</head>
 	<body>
 		<ul>
@@ -32,8 +31,6 @@ if ($_POST["logout"])
 ?>
 
 
-<footer>
-    <p>Made by <b>Hiren</b>  & <b>Khloe</b></p>
-</footer>
+
 </body>
 </html>
