@@ -143,7 +143,7 @@ if ($currentShip != False)
 			</div>
 			<div class="small">
 				<div>
-					<button onclick='sendGet("endPhase.php")'>End Phase</button>
+				<button style=" border: none;background-color: Transparent" onclick='sendGet("endPhase.php")'><img  style="height:	95px;width:	250px" class="s_e" src="/resources/images/end_phase.png" /></button>
 				</div>
 			</div>
 			<div class="end" id="log">
