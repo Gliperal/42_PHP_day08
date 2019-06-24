@@ -1,6 +1,23 @@
 <html>
 	<head>
 		<title>Lobby</title>
+		<style>
+
+
+div.wait
+{
+	font-size: 16pt;
+	text-align: center;
+	width: 100%;
+}
+
+p.doggo
+{
+	text-align: center;
+}
+
+
+		</style>
 		<script
 			src="https://code.jquery.com/jquery-3.4.1.min.js"
 			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -59,9 +76,11 @@ $awaiting = $lobby->playersLeft();
 if ($awaiting === 0)
 	header("Location:game.php?id=" . $lobbyID);
 else if ($awaiting === 1)
-	echo "Waiting for 1 more player to join...";
+	echo "<div class=\"wait\">Waiting for 1 more player to join...</div><br/>";
 else
-	echo "Waiting for " . $lobby->playersLeft() . " more players to join...";
+	echo "<div class=\"wait\">Waiting for " . $lobby->playersLeft() . " more players to join...</div><br/>";
+echo "<div class=\"wait\">In the mean time, enjoy this dog:</div>";
+echo "<p class=\"doggo\"><img src=\"/resources/images/dog.jpg\" alt=\"Nevermind, the dog didn't load.\" /></p>";
 ?>
 
 
