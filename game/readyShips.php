@@ -19,9 +19,10 @@ else
 		else if ($ship instanceof ImperialScout)
 			$type = 'Imperial Scout';
 		echo '<input type="radio" name="active-select" value='.$name.'>'.$type.':<br /> '.$name.'<br /></input><br />';
+		
 	}
 saveGame();
 ?>
 
 </form>
-<button id="active-submit">Activate Ship</button>
+<button id="active-submit" style=' border: none;background-color: Transparent' ><img  style='height:	90px;width:	250px' src='/resources/images/activate.png' /></button>
