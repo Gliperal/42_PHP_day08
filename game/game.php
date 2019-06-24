@@ -81,8 +81,8 @@ session_start();
 				color: white;
 			}
 			img.pl {
-				height:	20px;
-				width:	20px;
+				height:	62px;
+				width:	200px;
 			}
 			img.fire {
 				width:	100%;
@@ -108,14 +108,16 @@ session_start();
 			</div>
 			<div class="normal">
 				<div class="orders">
-					<p>Speed:</p>
-					<button onclick='sendGet("plusSpeed.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
-					<p>Weapon:</p>
-					<button onclick='sendGet("plusWeapon.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
-					<p>Shield:</p>
-					<button onclick='sendGet("plusShield.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
-					<p>Repair:</p>
-					<button onclick='sendGet("plusRepair.php")'><img class="pl" src="/resources/images/plus_button.png" /></button>
+					<button style=" border: none;background-color: Transparent" onclick='sendGet("plusSpeed.php")'><img class="pl" src="/resources/images/speed_icon.png" /></button>
+					<br>
+					<br>
+					<button style=" border: none;background-color: Transparent" onclick='sendGet("plusWeapon.php")'><img class="pl" src="/resources/images/weapon_icon.png" /></button>
+					<br>
+					<br>
+					<button style=" border: none;background-color: Transparent" onclick='sendGet("plusShield.php")'><img class="pl" src="/resources/images/shield_icon.png" /></button>
+					<br>
+					<br>
+					<button style=" border: none;background-color: Transparent" onclick='sendGet("plusRepair.php")'><img class="pl" src="/resources/images/repair_icon.png" /></button>
 				</div>
 <!--?php
 $currentShip = $game->getActiveShip();
