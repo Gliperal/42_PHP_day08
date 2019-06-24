@@ -30,8 +30,63 @@ if (array_key_exists("submit", $_POST) and $_POST["submit"] == "Chat")
 
 
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+	background-color: #ffffff;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+</head>
 	<body>
-		<div class="chat">
+	<img  style="height: 250pt; width: 250pt" src="../resources/images/chat_room.png"><br>
+		<div class="chat" style="height: 200px; width: 50%">
 
 
 <?php
@@ -53,9 +108,9 @@ else
 		$date_str = date("H:i", $message["time"]);
 		$text = $message["msg"];
 		if ($user == $current_user)
-			echo "<div class=\"chat-msg, me\"><b>" . $user . "</b> (" . $date_str . "): " . $text . "</div><br />";
+			echo "<div class='container'><b>" . $user . "</b> (" . $date_str . "): " . $text . "</div><br />";
 		else
-			echo "<div class=\"chat-msg\"><b>" . $user . "</b> (" . $date_str . "): " . $text . "</div><br />\n";
+			echo "<div class='container darker'><b>" . $user . "</b> (" . $date_str . "): " . $text . "</div><br />\n";
 	}
 ?>
 

@@ -110,11 +110,13 @@ foreach ($lobbies as $id=>$lobby)
 }
 
 ?>
-		<div style="display: block;margin-left: auto;margin-right: auto">
+<br>
+		<div style="display: block;margin-left: auto;margin-right: auto;text-align: center">
 			<a class="lobby-link" href="createLobby.php">
 				<img src="../resources/new_lobby_icon.png">
 			</a>
 		</div>
-		<iframe src="/game/chatroom.php" />
+		<br><br><br><br>
+		<iframe style="height: 50%;width: 100%"src="/game/chatroom.php" />
 	</body>
 </html>
