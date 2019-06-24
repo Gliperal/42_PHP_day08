@@ -16,6 +16,8 @@ else
 		$name = $ship->getName();
 		if ($ship instanceof ImperialIronclad)
 			$type = 'Imperial Ironclad';
+		else if ($ship instanceof ImperialScout)
+			$type = 'Imperial Scout';
 		echo '<input type="radio" name="active-select" value='.$name.'>'.$type.':<br /> '.$name.'<br /></input><br />';
 	}
 saveGame();

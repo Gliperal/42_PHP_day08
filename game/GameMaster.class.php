@@ -2,6 +2,7 @@
 
 include_once("Ship.class.php");
 include_once("ImperialIronclad.class.php"); // TODO This may become obsolete when the ships are not hard-coded
+include_once("ImperialScout.class.php"); // TODO This may become obsolete when the ships are not hard-coded
 include_once("Obstacle.class.php");
 include_once("Console.class.php");
 include_once("validateUser.php");
@@ -22,10 +23,10 @@ class GameMaster
 		[
 			// Player 1 ships
 			new ImperialIronclad("Annihilator", 0, ["x" => 20, "y" => 10], 0),
-			new ImperialIronclad("B.O.B.", 0, ["x" => 10, "y" => 20], 270),
+			new ImperialScout("B.O.B.", 0, ["x" => 10, "y" => 20], 270),
 			// Player 2 ships
 			new ImperialIronclad("Crusher", 1, ["x" => 130, "y" => 90], 180),
-			new ImperialIronclad("Demolisher", 1, ["x" => 140, "y" => 80], 90)
+			new ImperialScout("Demolisher", 1, ["x" => 140, "y" => 80], 90)
 		];
 		$this->_obstacles =
 		[
