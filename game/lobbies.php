@@ -115,5 +115,6 @@ foreach ($lobbies as $id=>$lobby)
 				<img src="../resources/new_lobby_icon.png">
 			</a>
 		</div>
+		<iframe src="/game/chatroom.php" />
 	</body>
 </html>
