@@ -27,6 +27,21 @@
 				  background-color: rgb(255, 0, 221);
 				  color: white;
 				}
+				div.about
+				{
+					color: #DDD;
+					background: rgba(0, 0, 0, 0.5);
+					font-family: Arial, Helvetica, sans-serif;
+					font-size: 14pt;
+					width: 75%;
+					margin-left: auto;
+					margin-right: auto;
+					padding: 10px;
+				}
+				div.section
+				{
+					margin-bottom: 20px;
+				}
 			</style>
 	</head>
 	<body>
@@ -36,8 +51,24 @@
 			<a href="game/rankings.php">Ranks</a>
 			<a class="active" href="">About</a>
 		</div>
-		<img src="resources/images/ship_royale_logo.png" style="height : 70%;width: 100%">
-
+		<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+			<img src="resources/images/ship_royale_logo.png" style="width: 400px">
+		</div>
+		<div class="about">
+			<div class="section">
+				Ship Royale is a two player game where starships battle for dominance. Each player has an armada of ships to command (or just two ships, in the simplified version). Upon entering a game you will be greeted by a star map with ships and obstacles. The green ships are for the first player and the red ships for the second player. Along the bottom is your console: this is how you communicate with your vessels. To start, select a ship from the list of available ships on the left and select "Activate Ship." You will then guide the active ship through three phases: order, movement, and attack.
+			</div>
+			<div class="section">
+			During the order phase, click on the Speed, Weapon, Shield, or Repair buttons to assign your Power Points. Each ship has a limited number of power points to spend per turn (determined by that ship's engine power), so choose carefully! Points spent on Speed will give your ship one extra D6 of movement. Points spent on Weapon will give your ship extra attack rolls. Points spent on Shield will give your ship better protection for one round. Each point spent on repair gives you a 1/6 chance to bring your ship back to its maximum hull points.
+			</div>
+			<div class="section">
+			Once you have spent your Power Points, click on "End Phase" to advance to the Movement Phase. During this phase you get to navigate your ship around the dangerous black holes, asteroids, and enemy ships. Be warned, if you try to turn tail and flee, then the Krakens lurking just outside the borders of the map will have a nice feast. Use the three buttons in the movement panel to turn your ship left, right, or to propel it forward. You will have a limited amount of movement during this phase depending on how you spent your Power Points. Once you are satisfied with your ships position, click the "End Phase" button to advance to the Attack Phase.
+			</div>
+			<div class="section">
+			During the Attack Phase, click the button to Attack. If you are out of range or not facing another ship your bullets will have no effect.
+			</div>
+			Once you have finished all three phases, click "End Phase" to deactivate that ship. Once you have run through the phases for all your ships then the game will switch to your opponent's turn.
+		</div>
 	</div>
    </body>
 </html>
