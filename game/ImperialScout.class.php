@@ -21,6 +21,11 @@ class ImperialScout extends Ship
 		];
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("ImperialScout.doc.txt");
+    }
+
 	protected function getRawSize()
 	{
 		return $this->_size;

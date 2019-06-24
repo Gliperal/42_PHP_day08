@@ -1,0 +1,24 @@
+<- ImperialIronclad ------------------------------------------------------------
+The Ironclad is one of the largest ships in the fleet. It has great attacking
+power and defence, at the cost of low maneuverability.
+
+An instance is constructed with:
+	new ImperialIronclad( $name, $playerID, $position, $angle );
+where
+	$name is the name of the ship (should be unique in a game).
+	$playerID is the player controlling the ship (0 or 1 in a 2 player game).
+	$position is an array representing the position of the ship.
+		$position = array( "x" => 42, "y" => 42 );
+	$angle is 0, 90, 180, or 270.
+
+As a subclass of Ship, ImperialIronclad inherits the following methods:
+
+getRawSize();
+getCenter();
+getMaxHP();
+getEP();
+getSpeed();
+getHandling();
+getBaseShield();
+getWeapons();
+------------------------------------------------------------ ImperialIronclad ->

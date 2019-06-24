@@ -1,0 +1,20 @@
+<- Bullet ----------------------------------------------------------------------
+The Bullet class is the most basic of projectiles.
+
+An instance is constructed with three parameters, the initial location of the
+bullet, the size (width and height) of the bullet, and the angle towards which
+it is facing. The angle must be either 0, 90, 180, or 270.
+
+new Bullet(
+	array("x" => 42, "y" => 42),
+	array("x" => 1, "y" => 1),
+	90
+);
+
+As an instance of Collidable, it implements all the Collidable functions.
+
+Bullet provides the following additional function:
+
+void	move();
+Move the bullet one square along its chosen direction.
+---------------------------------------------------------------------- Bullet ->

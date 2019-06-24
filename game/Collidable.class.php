@@ -19,6 +19,11 @@ abstract class Collidable
 		;
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("Collidable.doc.txt");
+    }
+
 	public function isOOB()
 	{
 		$loc = $this->getLocation();

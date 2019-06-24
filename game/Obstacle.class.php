@@ -18,6 +18,11 @@ class Obstacle extends Collidable
 		return sprintf("Obstacle[%d, %d, %d, %d]", $this->_loc["x"], $this->_loc["y"], $this->_size["x"], $this->_size["y"]);
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("Obstacle.doc.txt");
+    }
+
 	public function getLocation()
 	{
 		return $this->_loc;

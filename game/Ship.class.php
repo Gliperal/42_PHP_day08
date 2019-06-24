@@ -63,6 +63,11 @@ abstract class Ship extends Collidable
 		);
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("Ship.doc.txt");
+    }
+
 	public function toTitleTag()
 	{
 		return sprintf("&#147%s&#148 | HP %d(%d) | PP %d | CP %d | MP %d",
@@ -428,6 +433,7 @@ abstract class Ship extends Collidable
 		foreach ($this->getWeapons() as $weapon)
 		{
 			$weapon->receiveCP($this->_cp);
+			$this->_cp = 0;
 			$weapon->shoot($ships, $obstacles);
 		}
 		return TRUE;

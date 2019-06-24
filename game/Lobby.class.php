@@ -16,6 +16,11 @@ class Lobby
 		$this->_players = [$host];
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("Lobby.doc.txt");
+    }
+
 	public function addPlayer($player)
 	{
 		if ($this->_locked)

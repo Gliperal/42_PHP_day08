@@ -10,6 +10,11 @@ class Console
 		$this->_logs[] = "Console started.";
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("Console.doc.txt");
+    }
+
 	private static function getCurrentInstance()
 	{
 		if (!array_key_exists("log", $_SESSION))
