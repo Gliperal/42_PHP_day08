@@ -6,8 +6,13 @@
 
 body
 {
-	background-image: url("/resources/images/space_background.png");
+	/* background-image: url("/resources/images/space_background.png"); */
 	background-size: 100% 100%;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-image: linear-gradient(to bottom, #000066 -2%, #9900cc 101%);
 }
 
 div.lobby-open, div.lobby-closed, div.lobby-over, div.new
@@ -84,7 +89,14 @@ foreach ($lobbies as $id=>$lobby)
 
 ?>
 
-
-		<a class="lobby-link" href="createLobby.php"><div class="new">New Lobby</div></a>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div style="display: block;margin-left: auto;margin-right: auto">
+			<a class="lobby-link" href="createLobby.php">
+				<img src="../resources/new_lobby_icon.png">
+			</a>
+		</div>
 	</body>
 </html>
