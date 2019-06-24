@@ -84,9 +84,13 @@ session_start();
 				height:	62px;
 				width:	200px;
 			}
+			img.pl_s {
+				height:	95px;
+				width:	95px;
+			}
 			img.fire {
-				width:	100%;
-				height:	30%;
+				height:	300px;
+				width:	300px;
 			}
 		</style>
 		<script
@@ -129,12 +133,13 @@ if ($currentShip != False)
 ?-->
 			</div>
 			<div class="normal">
-				<button onclick='sendGet("moveOrderLeft.php")'><img class="pl" src="/resources/images/turn_left.png" /></button><br/><br/>
-				<button onclick='sendGet("moveOrderRight.php")'><img class="pl" src="/resources/images/turn_right.png" /></button><br/><br/>
-				<button onclick='sendGet("moveOrderForward.php")'>Forward</button>
+				<button style=" border: none;background-color: Transparent" onclick='sendGet("moveOrderLeft.php")'><img class="pl_s" src="/resources/images/turn_left.png" /></button>
+				<button style=" border: none;background-color: Transparent" onclick='sendGet("moveOrderForward.php")'><img class="pl_s" src="/resources/images/forward.png" /></button>
+				<button style=" border: none;background-color: Transparent" onclick='sendGet("moveOrderRight.php")'><img class="pl_s" src="/resources/images/turn_right.png" /></button>
+
 			</div>
 			<div class="normal">
-				<button onclick='sendGet("attack.php")'><img class="fire" src="/resources/images/fire.png" /></button>
+				<button style=" border: none;background-color: Transparent" onclick='sendGet("attack.php")'><img class="fire" src="/resources/images/fire.png" /></button>
 			</div>
 			<div class="small">
 				<div>
