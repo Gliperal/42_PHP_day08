@@ -48,7 +48,7 @@ class GameMaster
 	{
 	}
 
-	public function doc()
+	public static function doc()
 	{
 		return file_get_contents("GameMaster.doc.txt");
 	}

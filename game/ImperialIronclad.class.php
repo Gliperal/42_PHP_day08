@@ -22,6 +22,11 @@ class ImperialIronclad extends Ship
 		];
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("ImperialIronclad.doc.txt");
+    }
+
 	protected function getRawSize()
 	{
 		return $this->_size;

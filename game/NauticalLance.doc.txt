@@ -1,0 +1,14 @@
+<- NauticalLance ---------------------------------------------------------------
+The NauticalLance class is a basic weapon that fires in a straight line.
+
+An instance is constructed with an location and angle that represet the location
+and angle relative to the ship on which it is mounted. NauticalLances must be
+mounted on one of the outermost cells of a ship, facing outwards, or else their
+projectiles may hit the ship itself. The following represents one mounted on the
+port-side bow (the ship is, at angle 0, facing towards positive "x").
+
+new NauticalLance( array( "x" => 1, "y" => -2 ), 90 ) );
+
+As an subclass of Collidable, it implements all the Collidable methods.
+As it implements Weapon, it implements all the Weapon methods.
+--------------------------------------------------------------- NauticalLance ->

@@ -27,6 +27,11 @@ class NauticalLance extends Collidable implements Weapon
 		$this->_angleOffset = $angleOffset;
 	}
 
+    public static function doc()
+    {
+        return file_get_contents("NauticalLance.doc.txt");
+    }
+
 	protected function getLocation()
 	{
 		return $this->_location;

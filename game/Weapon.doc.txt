@@ -1,0 +1,22 @@
+<- Weapon ----------------------------------------------------------------------
+The Weapon interface desribes a weapon that can be mounted on a ship, moved
+about, and fired.
+
+Any class that inherits weapon must implement the following methods:
+
+void	move($location, $angle);
+Move the weapon to a location, facing at an angle. Ideally weapons should be
+implemented in such a way (e.g. by storing an offset) that one Ship can send its
+location and angle to this function, and the weapon will then place itself
+correctly.
+
+void	shoot($ships, $obstacles);
+Shoot the weapon, taking into account the locations of ships and obstacles, and
+doing damage as necessary.
+
+void	resetCP();
+Reset the weapon's Change Points to their default value.
+
+void	receiveCP($amount);
+Receive some amount of CP with which to fire the weapon.
+---------------------------------------------------------------------- Weapon ->
