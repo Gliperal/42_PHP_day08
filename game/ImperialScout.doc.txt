@@ -1,0 +1,24 @@
+<- ImperialScout ---------------------------------------------------------------
+The Scouts are small but fast ships. They specialize in quick escapes and
+navigating dangerous terrain, but they can be destroyed easily.
+
+An instance is constructed with:
+	new ImperialScout( $name, $playerID, $position, $angle );
+where
+	$name is the name of the ship (should be unique in a game).
+	$playerID is the player controlling the ship (0 or 1 in a 2 player game).
+	$position is an array representing the position of the ship.
+		$position = array( "x" => 42, "y" => 42 );
+	$angle is 0, 90, 180, or 270.
+
+As a subclass of Ship, ImperialScout inherits the following methods:
+
+getRawSize();
+getCenter();
+getMaxHP();
+getEP();
+getSpeed();
+getHandling();
+getBaseShield();
+getWeapons();
+--------------------------------------------------------------- ImperialScout ->

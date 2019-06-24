@@ -1,0 +1,31 @@
+<- Collidable ------------------------------------------------------------------
+The Collidable class represents an object in 2D space with a width and height,
+and provides several methods for checking interactions between multiple
+Collidables.
+
+The Collidable class is abstract and cannot be instantiated. Any classes which
+extend Collidable must provide the following methods:
+
+array	getLocation();
+Return the location of the object as ["x" => $x_location, "y" => $y_location].
+
+array	getSize();
+Return the size of the object as ["x" => $x_location, "y" => $y_location].
+
+The class provides the following methods:
+
+boolean	overlaps( Collidable $that );
+Returns TRUE if this Collidable overlaps $that, FALSE otherwise.
+
+boolean	isOOB();
+Returns TRUE if this Collidable has any of its cells outside the range defined
+by x in [0, 150) and y in [0, 100).
+
+boolean	hasLineOfSightTo( Collidable $that, Collidable[] $obstacles );
+Draws an imaginary line between the center of this Collidable and $that. Returns
+TRUE if that line passes through the body of any Collidable in $obstacles, FALSE
+otherwise.
+
+float	distanceTo( Collidable $that );
+Returns the distance between the top left corners of the two Collidables.
+------------------------------------------------------------------ Collidable ->

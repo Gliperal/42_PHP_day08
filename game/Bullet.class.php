@@ -29,6 +29,11 @@ class Bullet extends Collidable
 		}
 	}
 
+	public static function doc()
+    {
+        return file_get_contents("Bullet.doc.txt");
+	}
+
 	protected function getLocation()
 	{
 		return $this->_location;
