@@ -1,0 +1,37 @@
+<- Lobby -----------------------------------------------------------------------
+Stores a game lobby.
+
+Constructing an instance of Lobby takes one username as an argument.
+
+new Lobby( "Bob Cannon" );
+
+The class accepts the following functions:
+
+void		addPlayer( $player );
+Attmpts to add a player to the current lobby. Returns true on success or an
+array containing the key "error" on failure.
+
+void		isReady();
+Returns TRUE if the lobby is ready to begin or is in progress, FALSE otherwise.
+
+void		isOver();
+Returns TRUE if the game has ended, FALSE otherwise.
+
+void		playersLeft();
+Returns the number of additional players required by the lobby in order to be
+full.
+
+void		toHTML();
+Returns an HTML representation of the lobby, to be used with lobbies.php.
+
+void		checkVictory();
+Tells the lobby to check whether or not the game has ended. If it has, the lobby
+will tell the server to record a victory.
+
+GameMaster	getGameMaster();
+Returns the game master associated with the lobby on success, or an array
+containing the key "error" on failure. May become deprecated soon.
+
+void		setGameMaster( GameMaster $gm );
+Sets the game master associated with the lobby. May become deprecated soon.
+----------------------------------------------------------------------- Lobby ->

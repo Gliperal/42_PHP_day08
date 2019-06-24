@@ -1,0 +1,26 @@
+<- Console ---------------------------------------------------------------------
+A class to log messages.
+
+Console instances are tied to the current PHP session. To obtain the instance
+use:
+	Console::getCurrentInstance();
+
+The class supports the following methods:
+
+void	clear();
+Clears the logs.
+
+void	 log_message( $message );
+Logs a message.
+
+void	 log_debug( $message );
+Logs a debugging message.
+
+void	 log_error( $message );
+Logs an error.
+
+void	log_to_HTML();
+Display all the logged information so far in HTML format. Regular messages will
+appear in p.log-msg, and error messages will appear in p.log-err. Debug messages
+will not display.
+--------------------------------------------------------------------- Console ->
