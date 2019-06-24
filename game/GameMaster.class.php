@@ -40,7 +40,7 @@ class GameMaster
 			new Obstacle(99, 64, 2, 2),
 			new Obstacle(49, 34, 2, 2),
 		];
-		$this->_currentPlayer = count($_players) - 1;
+		$this->_currentPlayer = count($this->_players) - 1;
 		$this->finishTurn();
 	}
 

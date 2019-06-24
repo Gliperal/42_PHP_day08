@@ -4,10 +4,10 @@
 //session_start();
 function whoami()
 {
-	if (!array_key_exists("loggued_on_user", $_SESSION))
+	if (!array_key_exists("logged_in_user", $_SESSION))
 		return FALSE;
-	if ($_SESSION["loggued_on_user"])
-		return ($_SESSION["loggued_on_user"]);
+	if ($_SESSION["logged_in_user"])
+		return ($_SESSION["logged_in_user"]);
 	else
 		return false;
 }
